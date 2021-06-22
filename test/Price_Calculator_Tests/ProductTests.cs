@@ -21,7 +21,7 @@ namespace Price_Calculator_Tests
             //assert
             Assert.Equal(expectedName, product.Name);
             Assert.Equal(expectedUPC, product.UPC);
-            Assert.Equal(expectedPrice, product.PriceBeforeTax);
+            Assert.Equal(expectedPrice, product.PriceBeforeAdjustments);
         }
 
         //Tests that the ValidatePrice method in the Product class throws an ArgumentException if the input price is invalid     

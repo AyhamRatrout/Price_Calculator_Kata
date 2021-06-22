@@ -6,15 +6,15 @@ namespace Price_Calculator_Classes
     {
         public string Name{get; set;}
         public int UPC{get; set;}
-        public double PriceBeforeTax{get; set;}
-        public double PriceAfterTax{get; set;}
+        public double PriceBeforeAdjustments{get; set;}
+        public double PriceAfterAdjustments{get; set;}
 
         //Initializes a Product instance by passing in a Name (string), UPC (int), and Price (double)
         public Product(string Name, int UPC, double PriceBeforeTax)
         {
             this.Name = Name;
             this.UPC = UPC;
-            this.PriceBeforeTax = Math.Round(ValidatePrice(PriceBeforeTax), 2); //Validates the price the user passes then rounds it to two decimal digits if valid
+            this.PriceBeforeAdjustments = Math.Round(ValidatePrice(PriceBeforeTax), 2); //Validates the price the user passes then rounds it to two decimal digits if valid
         }
 
         //Helper method validates the price the user passes for a product. If the price is invalid, throws an ArgumentException

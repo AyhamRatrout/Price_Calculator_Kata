@@ -10,17 +10,22 @@ namespace Price_Calculator_Classes
             Console.WriteLine("***************************************");
             TestProductConstructorInvalid();
             Console.WriteLine("***************************************");
-            TestCalculatePriceDefaultTaxValid();
+            TestCalculatePriceDefaultTaxValidNoDiscount();
             Console.WriteLine("***************************************");
-            TestCalculatePriceCustomTaxValid();
+            TestCalculatePriceDefaultTaxValidWithDiscount();
+            Console.WriteLine("***************************************");
+            TestCalculatePriceCustomTaxValidNoDiscount();
+            Console.WriteLine("***************************************");
+            TestCalculatePriceCustomTaxValidWithDiscount();
             Console.WriteLine("***************************************");
             TestCalculatePriceCustomTaxInvalid();
+            TestApplyDiscountInvalid();
         }
 
         //Tests that the Product class constructor does indeed create a Product with the data that the users passes in
         private static void TestProductConstructorValid(){
             var product = new Product("Apples", 123456, 20.0);
-            Console.WriteLine($"Product name: {product.Name}, UPC: {product.UPC}, Base price: {product.PriceBeforeTax :N2}");
+            Console.WriteLine($"Product name: {product.Name}, UPC: {product.UPC}, Base price: {product.PriceBeforeAdjustments :N2}");
 
         }
 
@@ -29,25 +34,49 @@ namespace Price_Calculator_Classes
             var product = new Product("Apples", 123456, -20.0);
         }
 
-        //Tests that the CalculatePriceDefaultTax works as intended (i.e. applies the default tax and displays the results)
-        private static void TestCalculatePriceDefaultTaxValid()
+        //Tests that the CalculatePriceDefaultTax works as intended when no discount is applied (i.e. applies the default tax and displays the results)
+        private static void TestCalculatePriceDefaultTaxValidNoDiscount()
         {
             var product = new Product("Apples", 123456, 20.0);
-            product.CalculatePriceDefaultTax();
+            PriceCalculator.ApplyDiscount(0);
+            product.CalculateAdjustedPriceDefaultTax();
         }
 
-        //Tests that the CalculatePriceCustomTax works as intended (i.e. applies the tax the user passes in and displays the results)
-        private static void TestCalculatePriceCustomTaxValid()
+        //Tests that the CalculatePriceDefaultTax works as intended when discount is applied (i.e. applies the default tax and displays the results)
+        private static void TestCalculatePriceDefaultTaxValidWithDiscount()
         {
             var product = new Product("Apples", 123456, 20.0);
-            product.CalculatePriceCustomTax(30);
+            PriceCalculator.ApplyDiscount(10);
+            product.CalculateAdjustedPriceDefaultTax();
         }
 
+        //Tests that the CalculatePriceCustomTax works as intended when no discount is applied (i.e. applies the tax the user passes in and displays the results)
+        private static void TestCalculatePriceCustomTaxValidNoDiscount()
+        {
+            var product = new Product("Apples", 123456, 20.0);
+            PriceCalculator.ApplyDiscount(0);
+            product.CalculateAdjustedPriceCustomTax(30);
+        }
+
+        //Tests that the CalculatePriceCustomTax works as intended when discount is applied (i.e. applies the tax the user passes in and displays the results)
+        private static void TestCalculatePriceCustomTaxValidWithDiscount()
+        {
+            var product = new Product("Apples", 123456, 20.0);
+            PriceCalculator.ApplyDiscount(10);
+            product.CalculateAdjustedPriceCustomTax(30);
+        }
+        
         //Tests that the CalculatePriceCustomTax throws an ArgumentException for invalid tax values
         private static void TestCalculatePriceCustomTaxInvalid()
         {
             var product = new Product("Apples", 123456, 20.0);
-            product.CalculatePriceCustomTax(-30);
+            product.CalculateAdjustedPriceCustomTax(-30);
+        }
+
+        //Tests that the ApplyDiscount method throws an ArgumentException for invalid discount values
+        private static void TestApplyDiscountInvalid()
+        {
+            PriceCalculator.ApplyDiscount(105);
         }
     }
 }
