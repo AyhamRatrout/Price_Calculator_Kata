@@ -62,7 +62,7 @@ Customer is happy to announce expansion to other markets.
 New request is to support currencies other than US dollar.
 Currencies should be indicated using ISO-3 codes (e.g. USD, GBP, JPY, etc.).
 
-10: PRECISION:
+10. PRECISION:
 New request comes from the accounting department. All money-related calculations must be performed with four decimal digits precision and then rounded to two decimal digits before becoming final.
 This means, for example, that all discounts, taxes and expenses must be calculated and combined with higher precision and then each final line rounded to lower precision (see example below).
 
