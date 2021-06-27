@@ -11,6 +11,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D6D4F104-882
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Price_Calculator_Classes", "src\Price_Calculator_Classes\Price_Calculator_Classes.csproj", "{8F1FF7E6-20B2-4C8B-B549-6484C6F37054}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Extension_Library", "Extension_Library\Extension_Library.csproj", "{09AA61C9-D21E-4B66-885B-D10E0314CAA9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,6 +50,18 @@ Global
 		{8F1FF7E6-20B2-4C8B-B549-6484C6F37054}.Release|x64.Build.0 = Release|Any CPU
 		{8F1FF7E6-20B2-4C8B-B549-6484C6F37054}.Release|x86.ActiveCfg = Release|Any CPU
 		{8F1FF7E6-20B2-4C8B-B549-6484C6F37054}.Release|x86.Build.0 = Release|Any CPU
+		{09AA61C9-D21E-4B66-885B-D10E0314CAA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09AA61C9-D21E-4B66-885B-D10E0314CAA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09AA61C9-D21E-4B66-885B-D10E0314CAA9}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{09AA61C9-D21E-4B66-885B-D10E0314CAA9}.Debug|x64.Build.0 = Debug|Any CPU
+		{09AA61C9-D21E-4B66-885B-D10E0314CAA9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{09AA61C9-D21E-4B66-885B-D10E0314CAA9}.Debug|x86.Build.0 = Debug|Any CPU
+		{09AA61C9-D21E-4B66-885B-D10E0314CAA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09AA61C9-D21E-4B66-885B-D10E0314CAA9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09AA61C9-D21E-4B66-885B-D10E0314CAA9}.Release|x64.ActiveCfg = Release|Any CPU
+		{09AA61C9-D21E-4B66-885B-D10E0314CAA9}.Release|x64.Build.0 = Release|Any CPU
+		{09AA61C9-D21E-4B66-885B-D10E0314CAA9}.Release|x86.ActiveCfg = Release|Any CPU
+		{09AA61C9-D21E-4B66-885B-D10E0314CAA9}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{A662D97D-61EA-4C31-80D5-1890DE8EE202} = {439DD46C-76E6-45E2-815F-31F0C7E81F41}

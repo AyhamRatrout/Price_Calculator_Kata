@@ -1,42 +1,45 @@
 using System;
-using Price_Calculator_Classes;
 using Xunit;
+using Price_Calculator_Classes;
 
 namespace Price_Calculator_Tests
 {
     public class ProductTests
     {
-        //Tests that the ValidatePrice method returns a valid Price back to the constructor thus a creating a Product instance
+        //Tests if a Product instance gets created if the input values are valid
         [Fact]
-        public void TestValidatePriceMethodValid()
+        public void TestValidateMethodForValidInputs()
         {
             //arrange
             var expectedName = "Apples";
-            var expectedUPC = 112233559;
-            var expectedPrice = 20.25;
+            var expectedUPC = 112233445;
+            var expectedPrice = 19.95;
 
             //act
-            var product = new Product("Apples", 112233559, 20.25);
+            var product = new Product("Apples", 112233445, 19.95);
 
             //assert
             Assert.Equal(expectedName, product.Name);
             Assert.Equal(expectedUPC, product.UPC);
-            Assert.Equal(expectedPrice, product.PriceBeforeAdjustments);
+            Assert.Equal(expectedPrice, product.Price);
         }
 
-        //Tests that the ValidatePrice method in the Product class throws an ArgumentException if the input price is invalid     
+        //Tests if the Validate method throws an ArgumentException when a Product is created with invalid input values
         [Fact]
-        public void TestValidatePriceMethodInvalid()
+        public void TestValidateMethodForInvalidInputs()
         {
             //arrange
-            var expected = "Invalid input! All products must have a price greater than zero...";
+            var expected = "Invalid inputs! Please make sure that the product's name is not null, empty, or whitespace, the product's UPC is greater than zero, and the product's price is also greater than zero...";
 
             //act
-            var actual = Assert.Throws<ArgumentException>(() => new Product("Apples", 112233559, -1.450));
+            var actual1 = Assert.Throws<ArgumentException>(() => new Product(" ", 112233445, 19.95));
+            var actual2 = Assert.Throws<ArgumentException>(() => new Product("Apples", -112233445, 19.95));
+            var actual3 = Assert.Throws<ArgumentException>(() => new Product("Apples", 112233445, -19.95));
 
             //assert
-            Assert.Equal(expected, actual.Message);
-
+            Assert.Equal(expected, actual1.Message);   
+            Assert.Equal(expected, actual2.Message);
+            Assert.Equal(expected, actual3.Message);         
         }
     }
 }

@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Price_Calculator_Classes\Price_Calculator_Classes.csproj" />
+    <ProjectReference Include="..\..\Extension_Library\Extension_Library.csproj" />
   </ItemGroup>
 
 </Project>

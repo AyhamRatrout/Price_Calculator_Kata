@@ -4,29 +4,35 @@ namespace Price_Calculator_Classes
 {
     public class Product
     {
-        public string Name{get; set;}
-        public int UPC{get; set;}
-        public double PriceBeforeAdjustments{get; set;}
-        public double PriceAfterAdjustments{get; set;}
+        public string Name{get; private set;} //Each product has a name
+        public int UPC{get; private set;} //Each product has a UPC
+        public double Price{get; private set;} //Each product has a price
 
-        //Initializes a Product instance by passing in a Name (string), UPC (int), and Price (double)
-        public Product(string Name, int UPC, double PriceBeforeTax)
+        //public double PriceAfterAdjustments{get;private set;}
+
+        //Class constructor initializes a Product instance when provided a Name, UPC, and a Price
+        public Product(string Name, int UPC, double Price)
         {
             this.Name = Name;
             this.UPC = UPC;
-            this.PriceBeforeAdjustments = Math.Round(ValidatePrice(PriceBeforeTax), 2); //Validates the price the user passes then rounds it to two decimal digits if valid
+            this.Price = Math.Round(Price, 2);
+            Validate(); //validates the values above before creating a Product instance
         }
 
-        //Helper method validates the price the user passes for a product. If the price is invalid, throws an ArgumentException
-        private double ValidatePrice(double Price)
+        //Helper method checks a Products fields for validity. Throws an ArgumentException if not valid
+        private void Validate()
         {
-            if(Price <= 0)
+            if(!String.IsNullOrWhiteSpace(this.Name))
             {
-                throw new ArgumentException("Invalid input! All products must have a price greater than zero...");
+                if(this.UPC > 0)
+                {
+                    if(this.Price > 0)
+                    {
+                        return;
+                    }
+                }
             }
-
-            return Price;
-
+            throw new ArgumentException("Invalid inputs! Please make sure that the product's name is not null, empty, or whitespace, the product's UPC is greater than zero, and the product's price is also greater than zero...");
         }
     }
 }

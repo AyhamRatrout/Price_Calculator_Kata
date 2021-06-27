@@ -6,77 +6,133 @@ namespace Price_Calculator_Classes
     {
         static void Main(string[] args)
         {
-            TestProductConstructorValid();
-            Console.WriteLine("***************************************");
-            TestProductConstructorInvalid();
-            Console.WriteLine("***************************************");
-            TestCalculatePriceDefaultTaxValidNoDiscount();
-            Console.WriteLine("***************************************");
-            TestCalculatePriceDefaultTaxValidWithDiscount();
-            Console.WriteLine("***************************************");
-            TestCalculatePriceCustomTaxValidNoDiscount();
-            Console.WriteLine("***************************************");
-            TestCalculatePriceCustomTaxValidWithDiscount();
-            Console.WriteLine("***************************************");
-            TestCalculatePriceCustomTaxInvalid();
-            TestApplyDiscountInvalid();
+            TestWithDefaultTaxNoDiscountsApplied();
+            TestWithCustomTaxNoDiscountsApplied();
+            TestWithDefaultTaxRelativeDiscountApplied();
+            TestWithCustomTaxRelativeDiscountApplied();
+
+            TestWithDefaultTaxUPCSpecificDiscountApplied();
+            TestWithCustomTaxUPCSpecificDiscountApplied();
+            TestWithDefaultTaxBothDiscountsApplied();
+            TestWithCustomTaxBothDiscountsApplied(); 
         }
 
-        //Tests that the Product class constructor does indeed create a Product with the data that the users passes in
-        private static void TestProductConstructorValid(){
-            var product = new Product("Apples", 123456, 20.0);
-            Console.WriteLine($"Product name: {product.Name}, UPC: {product.UPC}, Base price: {product.PriceBeforeAdjustments :N2}");
-
-        }
-
-        //Tests that the Product class throws an ArgumentException if an invalid price (less than or equal to zero) is passed in
-        private static void TestProductConstructorInvalid(){
-            var product = new Product("Apples", 123456, -20.0);
-        }
-
-        //Tests that the CalculatePriceDefaultTax works as intended when no discount is applied (i.e. applies the default tax and displays the results)
-        private static void TestCalculatePriceDefaultTaxValidNoDiscount()
+        //Tests case 1: Default Tax and no discounts
+        private static void TestWithDefaultTaxNoDiscountsApplied()
         {
-            var product = new Product("Apples", 123456, 20.0);
-            PriceCalculator.ApplyDiscount(0);
-            product.CalculateAdjustedPriceDefaultTax();
+            var customer = new Customer();
+            customer.AddToCart(new Product("Apples", 11223344, 17.25));
+            customer.AddToCart(new Product("Bananas", 1122331, 20.25));
+            customer.AddToCart(new Product("Lofas", 1122331, 14.25));
+            customer.AddToCart(new Product("Orbees", 1122331, 10.25));
+
+            customer.PrintReceipt();
+            customer.GenerateReport();
         }
 
-        //Tests that the CalculatePriceDefaultTax works as intended when discount is applied (i.e. applies the default tax and displays the results)
-        private static void TestCalculatePriceDefaultTaxValidWithDiscount()
+        //Tests case 2: Default Tax and a reative discount
+        private static void TestWithDefaultTaxRelativeDiscountApplied()
         {
-            var product = new Product("Apples", 123456, 20.0);
-            PriceCalculator.ApplyDiscount(10);
-            product.CalculateAdjustedPriceDefaultTax();
+            var customer = new Customer();
+            customer.AddToCart(new Product("Apples", 11223344, 17.25));
+            customer.AddToCart(new Product("Bananas", 1122331, 20.25));
+            customer.AddToCart(new Product("Lofas", 1122331, 14.25));
+            customer.AddToCart(new Product("Orbees", 1122331, 10.25));
+            customer.ApplyDiscount(15);
+
+            customer.PrintReceipt();
+            customer.GenerateReport();
         }
 
-        //Tests that the CalculatePriceCustomTax works as intended when no discount is applied (i.e. applies the tax the user passes in and displays the results)
-        private static void TestCalculatePriceCustomTaxValidNoDiscount()
+        //Tests case 3: Default Tax and a UPC specific special discount
+        private static void TestWithDefaultTaxUPCSpecificDiscountApplied()
         {
-            var product = new Product("Apples", 123456, 20.0);
-            PriceCalculator.ApplyDiscount(0);
-            product.CalculateAdjustedPriceCustomTax(30);
+            var customer = new Customer();
+            customer.AddToCart(new Product("Apples", 11223344, 17.25));
+            customer.AddToCart(new Product("Bananas", 1122331, 20.25));
+            customer.AddToCart(new Product("Lofas", 1122331, 14.25));
+            customer.AddToCart(new Product("Orbees", 1122331, 10.25));
+            Administrator.AddUPCToDiscountList(1122331, 10);
+
+            customer.PrintReceipt();
+            customer.GenerateReport();
         }
 
-        //Tests that the CalculatePriceCustomTax works as intended when discount is applied (i.e. applies the tax the user passes in and displays the results)
-        private static void TestCalculatePriceCustomTaxValidWithDiscount()
+        //Tests case 4: Default Tax and both discounts (relative and special) applied
+        private static void TestWithDefaultTaxBothDiscountsApplied()
         {
-            var product = new Product("Apples", 123456, 20.0);
-            PriceCalculator.ApplyDiscount(10);
-            product.CalculateAdjustedPriceCustomTax(30);
-        }
-        
-        //Tests that the CalculatePriceCustomTax throws an ArgumentException for invalid tax values
-        private static void TestCalculatePriceCustomTaxInvalid()
-        {
-            var product = new Product("Apples", 123456, 20.0);
-            product.CalculateAdjustedPriceCustomTax(-30);
+            var customer = new Customer();
+            customer.AddToCart(new Product("Apples", 11223344, 17.25));
+            customer.AddToCart(new Product("Bananas", 1122331, 20.25));
+            customer.AddToCart(new Product("Lofas", 1122331, 14.25));
+            customer.AddToCart(new Product("Orbees", 1122331, 10.25));
+            customer.ApplyDiscount(15);
+            Administrator.AddUPCToDiscountList(1122331, 10);
+
+            customer.PrintReceipt();
+            customer.GenerateReport();
         }
 
-        //Tests that the ApplyDiscount method throws an ArgumentException for invalid discount values
-        private static void TestApplyDiscountInvalid()
+        //Tests case 5: Custom Tax and no discounts
+        private static void TestWithCustomTaxNoDiscountsApplied()
         {
-            PriceCalculator.ApplyDiscount(105);
+            var customer = new Customer();
+            customer.AddToCart(new Product("Apples", 11223344, 17.25));
+            customer.AddToCart(new Product("Bananas", 1122331, 20.25));
+            customer.AddToCart(new Product("Lofas", 1122331, 14.25));
+            customer.AddToCart(new Product("Orbees", 1122331, 10.25));
+            customer.ApplyTax(25);
+
+            customer.PrintReceipt();
+            customer.GenerateReport();
+        } 
+
+        //Tests case 6: Custom Tax and a reative discount
+        private static void TestWithCustomTaxRelativeDiscountApplied()
+        {
+            var customer = new Customer();
+            customer.AddToCart(new Product("Apples", 11223344, 17.25));
+            customer.AddToCart(new Product("Bananas", 1122331, 20.25));
+            customer.AddToCart(new Product("Lofas", 1122331, 14.25));
+            customer.AddToCart(new Product("Orbees", 1122331, 10.25));
+            customer.ApplyTax(25);
+            customer.ApplyDiscount(15);
+
+            customer.PrintReceipt();
+            customer.GenerateReport();
+        } 
+
+        //Tests case 7: Custom Tax and a UPC specific special discount
+        private static void TestWithCustomTaxUPCSpecificDiscountApplied()
+        {
+            var customer = new Customer();
+            customer.AddToCart(new Product("Apples", 11223344, 17.25));
+            customer.AddToCart(new Product("Bananas", 1122331, 20.25));
+            customer.AddToCart(new Product("Lofas", 1122331, 14.25));
+            customer.AddToCart(new Product("Orbees", 1122331, 10.25));
+            customer.ApplyTax(25);
+            Administrator.AddUPCToDiscountList(1122331, 10);
+
+            customer.PrintReceipt();
+            customer.GenerateReport();
         }
+
+        //Tests case 8: Default Tax and both discounts (relative and special) applied
+        private static void TestWithCustomTaxBothDiscountsApplied()
+        {
+            var customer = new Customer();
+            customer.AddToCart(new Product("Apples", 11223344, 17.25));
+            customer.AddToCart(new Product("Bananas", 1122331, 20.25));
+            customer.AddToCart(new Product("Lofas", 1122331, 14.25));
+            customer.AddToCart(new Product("Orbees", 1122331, 10.25));
+            customer.ApplyTax(25);
+            customer.ApplyDiscount(15);
+            Administrator.AddUPCToDiscountList(1122331, 10);
+
+            customer.PrintReceipt();
+            customer.GenerateReport();
+        }
+
+
     }
 }
