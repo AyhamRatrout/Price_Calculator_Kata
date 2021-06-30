@@ -4,37 +4,40 @@ namespace Price_Calculator_Classes
 {
     public class PriceCalculator
     {
-        //A PriceCalculator needs a TaxCalculator instance to calculate tax.
-        public TaxCalculator TaxCalculator{get; private set;} 
+        //A PriceCalculator instance must have a TaxCalculator instance which takes care of calculating the Tax amount on a given project.
+        public TaxCalculator TaxCalculator {get; private set;}
         
-        //A PriceCalculator needs a DiscountCalculator instance to calculate discounts.
-        public DiscountCalculator DiscountCalculator{get; private set;}
+        //A PriceCalculator instance must have a DiscountCalculator instance which takes care of calculating the Discount amounts on a given product.
+        public DiscountCalculator DiscountCalculator {get; private set;}
 
-        //Class constructor initializes a PriceCalculator instance by initializing a TaxCalculator and a DiscountCalculator instances.
-        public PriceCalculator()
+        /*
+            Class constructor initializes a PriceCalculator instance using a TaxCalculator instance and a DiscountCalculator instance.
+            Validates both input parameters before initializing a PriceCalculator instance.
+        */
+        public PriceCalculator(TaxCalculator TaxCalculator, DiscountCalculator DiscountCalculator)
         {
-            this.TaxCalculator = new TaxCalculator();
-            this.DiscountCalculator = new DiscountCalculator();
+            this.TaxCalculator = TaxCalculator;
+            this.DiscountCalculator = DiscountCalculator;
+            Validate();
         }
 
-        //When a customer applies a tax amount, this method is invoked which in turn changes the Tax field in the TaxCalculator class.
-        public void ApplyTax(double Tax)
+        //Calculates the Price of a Product after applying Tax and any available Discounts to it.
+        public double CalculatePrice(Product product)
         {
-            this.TaxCalculator.Tax = Tax;
-        }
-
-        //When a customer applies a discount amount, this method is invoked which in turn changes the Discount field in the DiscountCalculator class.
-        public void ApplyDiscount(double Discount)
-        {
-            this.DiscountCalculator.Discount = Discount;
-        }
-
-        //Calculates and returns the price of a product after applying adding tax and subtracting any discounts. Returns price to two decimals.
-        public double CalculateAdjustedPrice(Product product)
-        {
-            var adjustments = this.TaxCalculator.CalculateTaxAmount(product) - this.DiscountCalculator.CalculateTotalDiscountAmount(product);
+            var adjustments = this.TaxCalculator.CalculateTaxAmount(product) - this.DiscountCalculator.CalculateDiscountAmount(product);
             return Math.Round(product.Price + adjustments, 2);
         }
-        
+
+        /*
+            Hlper method validates (checks) that a PriceCalculator instance TaxCalculator and DiscountCalculator properties aare not before
+            creating a PriceCalculator instance. Throw an ArgumentException if either one of the two properties is null.
+        */
+        private void Validate()
+        {
+            if(this.TaxCalculator == null || this.DiscountCalculator == null)
+            {
+                throw new ArgumentException("Invalid input! Please make sure that you are not passing a null value when initializing an instance of this class.");
+            }
+        }        
     }
 }

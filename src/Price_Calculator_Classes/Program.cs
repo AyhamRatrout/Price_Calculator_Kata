@@ -1,4 +1,5 @@
 ﻿using System;
+using Extension_Library;
 
 namespace Price_Calculator_Classes
 {
@@ -7,132 +8,174 @@ namespace Price_Calculator_Classes
         static void Main(string[] args)
         {
             TestWithDefaultTaxNoDiscountsApplied();
-            TestWithCustomTaxNoDiscountsApplied();
             TestWithDefaultTaxRelativeDiscountApplied();
-            TestWithCustomTaxRelativeDiscountApplied();
-
             TestWithDefaultTaxUPCSpecificDiscountApplied();
-            TestWithCustomTaxUPCSpecificDiscountApplied();
             TestWithDefaultTaxBothDiscountsApplied();
-            TestWithCustomTaxBothDiscountsApplied(); 
+            TestWithCustomTaxNoDiscountsApplied();
+            TestWithCustomTaxRelativeDiscountApplied();
+            TestWithCustomTaxUPCSpecificDiscountApplied();
+            TestWithCustomTaxBothDiscountsApplied();
         }
 
+        
         //Tests case 1: Default Tax and no discounts
         private static void TestWithDefaultTaxNoDiscountsApplied()
         {
-            var customer = new Customer();
-            customer.AddToCart(new Product("Apples", 11223344, 17.25));
-            customer.AddToCart(new Product("Bananas", 1122331, 20.25));
-            customer.AddToCart(new Product("Lofas", 1122331, 14.25));
-            customer.AddToCart(new Product("Orbees", 1122331, 10.25));
+            var taxCalculator = new TaxCalculator();
+            var discountCalculator = new DiscountCalculator(new RelativeDiscountCalculator(), new SpecialDiscountCalculator(new SpecialDiscountList()));
+            var PriceCalculator = new PriceCalculator(taxCalculator, discountCalculator);
 
-            customer.PrintReceipt();
-            customer.GenerateReport();
+            var shoppingCart = new ShoppingCart(PriceCalculator);
+            shoppingCart.Add(new Product("Apples", 11223344, 17.25));
+            shoppingCart.Add(new Product("Bananas", 1122331, 20.25));
+            shoppingCart.Add(new Product("Lofas", 1122331, 14.25));
+            shoppingCart.Add(new Product("Orbees", 1122331, 10.25));
+
+            var receipt = new Receipt(shoppingCart);
+            receipt.Print();
+            var report = new Report(shoppingCart);
+            report.Print();
         }
 
         //Tests case 2: Default Tax and a reative discount
         private static void TestWithDefaultTaxRelativeDiscountApplied()
         {
-            var customer = new Customer();
-            customer.AddToCart(new Product("Apples", 11223344, 17.25));
-            customer.AddToCart(new Product("Bananas", 1122331, 20.25));
-            customer.AddToCart(new Product("Lofas", 1122331, 14.25));
-            customer.AddToCart(new Product("Orbees", 1122331, 10.25));
-            customer.ApplyDiscount(15);
+            var taxCalculator = new TaxCalculator();
+            var discountCalculator = new DiscountCalculator(new RelativeDiscountCalculator(10), new SpecialDiscountCalculator(new SpecialDiscountList()));
+            var PriceCalculator = new PriceCalculator(taxCalculator, discountCalculator);
 
-            customer.PrintReceipt();
-            customer.GenerateReport();
+            var shoppingCart = new ShoppingCart(PriceCalculator);
+            shoppingCart.Add(new Product("Apples", 11223344, 17.25));
+            shoppingCart.Add(new Product("Bananas", 1122331, 20.25));
+            shoppingCart.Add(new Product("Lofas", 1122331, 14.25));
+            shoppingCart.Add(new Product("Orbees", 1122331, 10.25));
+
+            var receipt = new Receipt(shoppingCart);
+            receipt.Print();
+            var report = new Report(shoppingCart);
+            report.Print();
         }
 
         //Tests case 3: Default Tax and a UPC specific special discount
         private static void TestWithDefaultTaxUPCSpecificDiscountApplied()
         {
-            var customer = new Customer();
-            customer.AddToCart(new Product("Apples", 11223344, 17.25));
-            customer.AddToCart(new Product("Bananas", 1122331, 20.25));
-            customer.AddToCart(new Product("Lofas", 1122331, 14.25));
-            customer.AddToCart(new Product("Orbees", 1122331, 10.25));
-            Administrator.AddUPCToDiscountList(1122331, 10);
+            var taxCalculator = new TaxCalculator();
+            var specialDiscountList = new SpecialDiscountList();
+            specialDiscountList.Add(1122331, 15);
+            var discountCalculator = new DiscountCalculator(new RelativeDiscountCalculator(), new SpecialDiscountCalculator(specialDiscountList));
+            var PriceCalculator = new PriceCalculator(taxCalculator, discountCalculator);
 
-            customer.PrintReceipt();
-            customer.GenerateReport();
+            var shoppingCart = new ShoppingCart(PriceCalculator);
+            shoppingCart.Add(new Product("Apples", 11223344, 17.25));
+            shoppingCart.Add(new Product("Bananas", 1122331, 20.25));
+            shoppingCart.Add(new Product("Lofas", 1122331, 14.25));
+            shoppingCart.Add(new Product("Orbees", 1122331, 10.25));
+
+            var receipt = new Receipt(shoppingCart);
+            receipt.Print();
+            var report = new Report(shoppingCart);
+            report.Print();
         }
 
         //Tests case 4: Default Tax and both discounts (relative and special) applied
         private static void TestWithDefaultTaxBothDiscountsApplied()
         {
-            var customer = new Customer();
-            customer.AddToCart(new Product("Apples", 11223344, 17.25));
-            customer.AddToCart(new Product("Bananas", 1122331, 20.25));
-            customer.AddToCart(new Product("Lofas", 1122331, 14.25));
-            customer.AddToCart(new Product("Orbees", 1122331, 10.25));
-            customer.ApplyDiscount(15);
-            Administrator.AddUPCToDiscountList(1122331, 10);
+            var taxCalculator = new TaxCalculator();
+            var specialDiscountList = new SpecialDiscountList();
+            specialDiscountList.Add(1122331, 15);
+            var discountCalculator = new DiscountCalculator(new RelativeDiscountCalculator(10), new SpecialDiscountCalculator(specialDiscountList));
+            var PriceCalculator = new PriceCalculator(taxCalculator, discountCalculator);
 
-            customer.PrintReceipt();
-            customer.GenerateReport();
+            var shoppingCart = new ShoppingCart(PriceCalculator);
+            shoppingCart.Add(new Product("Apples", 11223344, 17.25));
+            shoppingCart.Add(new Product("Bananas", 1122331, 20.25));
+            shoppingCart.Add(new Product("Lofas", 1122331, 14.25));
+            shoppingCart.Add(new Product("Orbees", 1122331, 10.25));
+
+            var receipt = new Receipt(shoppingCart);
+            receipt.Print();
+            var report = new Report(shoppingCart);
+            report.Print();
         }
 
         //Tests case 5: Custom Tax and no discounts
         private static void TestWithCustomTaxNoDiscountsApplied()
         {
-            var customer = new Customer();
-            customer.AddToCart(new Product("Apples", 11223344, 17.25));
-            customer.AddToCart(new Product("Bananas", 1122331, 20.25));
-            customer.AddToCart(new Product("Lofas", 1122331, 14.25));
-            customer.AddToCart(new Product("Orbees", 1122331, 10.25));
-            customer.ApplyTax(25);
+             var taxCalculator = new TaxCalculator(25);
+            var discountCalculator = new DiscountCalculator(new RelativeDiscountCalculator(), new SpecialDiscountCalculator(new SpecialDiscountList()));
+            var PriceCalculator = new PriceCalculator(taxCalculator, discountCalculator);
 
-            customer.PrintReceipt();
-            customer.GenerateReport();
+            var shoppingCart = new ShoppingCart(PriceCalculator);
+            shoppingCart.Add(new Product("Apples", 11223344, 17.25));
+            shoppingCart.Add(new Product("Bananas", 1122331, 20.25));
+            shoppingCart.Add(new Product("Lofas", 1122331, 14.25));
+            shoppingCart.Add(new Product("Orbees", 1122331, 10.25));
+
+            var receipt = new Receipt(shoppingCart);
+            receipt.Print();
+            var report = new Report(shoppingCart);
+            report.Print();
         } 
 
         //Tests case 6: Custom Tax and a reative discount
         private static void TestWithCustomTaxRelativeDiscountApplied()
         {
-            var customer = new Customer();
-            customer.AddToCart(new Product("Apples", 11223344, 17.25));
-            customer.AddToCart(new Product("Bananas", 1122331, 20.25));
-            customer.AddToCart(new Product("Lofas", 1122331, 14.25));
-            customer.AddToCart(new Product("Orbees", 1122331, 10.25));
-            customer.ApplyTax(25);
-            customer.ApplyDiscount(15);
+            var taxCalculator = new TaxCalculator(25);
+            var discountCalculator = new DiscountCalculator(new RelativeDiscountCalculator(10), new SpecialDiscountCalculator(new SpecialDiscountList()));
+            var PriceCalculator = new PriceCalculator(taxCalculator, discountCalculator);
 
-            customer.PrintReceipt();
-            customer.GenerateReport();
+            var shoppingCart = new ShoppingCart(PriceCalculator);
+            shoppingCart.Add(new Product("Apples", 11223344, 17.25));
+            shoppingCart.Add(new Product("Bananas", 1122331, 20.25));
+            shoppingCart.Add(new Product("Lofas", 1122331, 14.25));
+            shoppingCart.Add(new Product("Orbees", 1122331, 10.25));
+
+            var receipt = new Receipt(shoppingCart);
+            receipt.Print();
+            var report = new Report(shoppingCart);
+            report.Print();
         } 
 
         //Tests case 7: Custom Tax and a UPC specific special discount
         private static void TestWithCustomTaxUPCSpecificDiscountApplied()
         {
-            var customer = new Customer();
-            customer.AddToCart(new Product("Apples", 11223344, 17.25));
-            customer.AddToCart(new Product("Bananas", 1122331, 20.25));
-            customer.AddToCart(new Product("Lofas", 1122331, 14.25));
-            customer.AddToCart(new Product("Orbees", 1122331, 10.25));
-            customer.ApplyTax(25);
-            Administrator.AddUPCToDiscountList(1122331, 10);
+            var taxCalculator = new TaxCalculator(25);
+            var specialDiscountList = new SpecialDiscountList();
+            specialDiscountList.Add(1122331, 15);
+            var discountCalculator = new DiscountCalculator(new RelativeDiscountCalculator(), new SpecialDiscountCalculator(specialDiscountList));
+            var PriceCalculator = new PriceCalculator(taxCalculator, discountCalculator);
 
-            customer.PrintReceipt();
-            customer.GenerateReport();
+            var shoppingCart = new ShoppingCart(PriceCalculator);
+            shoppingCart.Add(new Product("Apples", 11223344, 17.25));
+            shoppingCart.Add(new Product("Bananas", 1122331, 20.25));
+            shoppingCart.Add(new Product("Lofas", 1122331, 14.25));
+            shoppingCart.Add(new Product("Orbees", 1122331, 10.25));
+
+            var receipt = new Receipt(shoppingCart);
+            receipt.Print();
+            var report = new Report(shoppingCart);
+            report.Print();
         }
 
         //Tests case 8: Default Tax and both discounts (relative and special) applied
         private static void TestWithCustomTaxBothDiscountsApplied()
         {
-            var customer = new Customer();
-            customer.AddToCart(new Product("Apples", 11223344, 17.25));
-            customer.AddToCart(new Product("Bananas", 1122331, 20.25));
-            customer.AddToCart(new Product("Lofas", 1122331, 14.25));
-            customer.AddToCart(new Product("Orbees", 1122331, 10.25));
-            customer.ApplyTax(25);
-            customer.ApplyDiscount(15);
-            Administrator.AddUPCToDiscountList(1122331, 10);
+            var taxCalculator = new TaxCalculator(25);
+            var specialDiscountList = new SpecialDiscountList();
+            specialDiscountList.Add(1122331, 15);
+            var discountCalculator = new DiscountCalculator(new RelativeDiscountCalculator(10), new SpecialDiscountCalculator(specialDiscountList));
+            var PriceCalculator = new PriceCalculator(taxCalculator, discountCalculator);
 
-            customer.PrintReceipt();
-            customer.GenerateReport();
+            var shoppingCart = new ShoppingCart(PriceCalculator);
+            shoppingCart.Add(new Product("Apples", 11223344, 17.25));
+            shoppingCart.Add(new Product("Bananas", 1122331, 20.25));
+            shoppingCart.Add(new Product("Lofas", 1122331, 14.25));
+            shoppingCart.Add(new Product("Orbees", 1122331, 10.25));
+
+            var receipt = new Receipt(shoppingCart);
+            receipt.Print();
+            var report = new Report(shoppingCart);
+            report.Print();
         }
-
-
     }
 }
