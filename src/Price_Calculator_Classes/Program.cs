@@ -22,7 +22,7 @@ namespace Price_Calculator_Classes
         private static void TestWithDefaultTaxNoDiscountsApplied()
         {
             var taxCalculator = new TaxCalculator();
-            var discountCalculator = new DiscountCalculator(new RelativeDiscountCalculator(), new SpecialDiscountCalculator(new SpecialDiscountList()));
+            var discountCalculator = new DiscountCalculator(new RelativeDiscountCalculator(), new SpecialDiscountCalculator(new SpecialDiscountList1()));
             var PriceCalculator = new PriceCalculator(taxCalculator, discountCalculator);
 
             var shoppingCart = new ShoppingCart(PriceCalculator);
@@ -41,7 +41,7 @@ namespace Price_Calculator_Classes
         private static void TestWithDefaultTaxRelativeDiscountApplied()
         {
             var taxCalculator = new TaxCalculator();
-            var discountCalculator = new DiscountCalculator(new RelativeDiscountCalculator(10), new SpecialDiscountCalculator(new SpecialDiscountList()));
+            var discountCalculator = new DiscountCalculator(new RelativeDiscountCalculator(10), new SpecialDiscountCalculator(new SpecialDiscountList1()));
             var PriceCalculator = new PriceCalculator(taxCalculator, discountCalculator);
 
             var shoppingCart = new ShoppingCart(PriceCalculator);
@@ -60,7 +60,7 @@ namespace Price_Calculator_Classes
         private static void TestWithDefaultTaxUPCSpecificDiscountApplied()
         {
             var taxCalculator = new TaxCalculator();
-            var specialDiscountList = new SpecialDiscountList();
+            var specialDiscountList = new SpecialDiscountList1();
             specialDiscountList.Add(1122331, 15);
             var discountCalculator = new DiscountCalculator(new RelativeDiscountCalculator(), new SpecialDiscountCalculator(specialDiscountList));
             var PriceCalculator = new PriceCalculator(taxCalculator, discountCalculator);
@@ -81,7 +81,7 @@ namespace Price_Calculator_Classes
         private static void TestWithDefaultTaxBothDiscountsApplied()
         {
             var taxCalculator = new TaxCalculator();
-            var specialDiscountList = new SpecialDiscountList();
+            var specialDiscountList = new SpecialDiscountList1();
             specialDiscountList.Add(1122331, 15);
             var discountCalculator = new DiscountCalculator(new RelativeDiscountCalculator(10), new SpecialDiscountCalculator(specialDiscountList));
             var PriceCalculator = new PriceCalculator(taxCalculator, discountCalculator);
@@ -102,7 +102,7 @@ namespace Price_Calculator_Classes
         private static void TestWithCustomTaxNoDiscountsApplied()
         {
              var taxCalculator = new TaxCalculator(25);
-            var discountCalculator = new DiscountCalculator(new RelativeDiscountCalculator(), new SpecialDiscountCalculator(new SpecialDiscountList()));
+            var discountCalculator = new DiscountCalculator(new RelativeDiscountCalculator(), new SpecialDiscountCalculator(new SpecialDiscountList1()));
             var PriceCalculator = new PriceCalculator(taxCalculator, discountCalculator);
 
             var shoppingCart = new ShoppingCart(PriceCalculator);
@@ -121,7 +121,7 @@ namespace Price_Calculator_Classes
         private static void TestWithCustomTaxRelativeDiscountApplied()
         {
             var taxCalculator = new TaxCalculator(25);
-            var discountCalculator = new DiscountCalculator(new RelativeDiscountCalculator(10), new SpecialDiscountCalculator(new SpecialDiscountList()));
+            var discountCalculator = new DiscountCalculator(new RelativeDiscountCalculator(10), new SpecialDiscountCalculator(new SpecialDiscountList1()));
             var PriceCalculator = new PriceCalculator(taxCalculator, discountCalculator);
 
             var shoppingCart = new ShoppingCart(PriceCalculator);
@@ -140,7 +140,7 @@ namespace Price_Calculator_Classes
         private static void TestWithCustomTaxUPCSpecificDiscountApplied()
         {
             var taxCalculator = new TaxCalculator(25);
-            var specialDiscountList = new SpecialDiscountList();
+            var specialDiscountList = new SpecialDiscountList1();
             specialDiscountList.Add(1122331, 15);
             var discountCalculator = new DiscountCalculator(new RelativeDiscountCalculator(), new SpecialDiscountCalculator(specialDiscountList));
             var PriceCalculator = new PriceCalculator(taxCalculator, discountCalculator);
@@ -161,7 +161,7 @@ namespace Price_Calculator_Classes
         private static void TestWithCustomTaxBothDiscountsApplied()
         {
             var taxCalculator = new TaxCalculator(25);
-            var specialDiscountList = new SpecialDiscountList();
+            var specialDiscountList = new SpecialDiscountList1();
             specialDiscountList.Add(1122331, 15);
             var discountCalculator = new DiscountCalculator(new RelativeDiscountCalculator(10), new SpecialDiscountCalculator(specialDiscountList));
             var PriceCalculator = new PriceCalculator(taxCalculator, discountCalculator);

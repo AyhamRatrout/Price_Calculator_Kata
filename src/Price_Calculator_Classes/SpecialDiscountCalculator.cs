@@ -7,10 +7,10 @@ namespace Price_Calculator_Classes
     public class SpecialDiscountCalculator: IDiscountCalculator
     {
         //A SpecialDiscountCalculator must have a SpecialDiscountList instance where it keeps track of any special discounts applied to any Products.
-        public SpecialDiscountList SpecialDiscountList {get; private set;}
+        public SpecialDiscountList1 SpecialDiscountList {get; private set;}
 
         //Class constructor initializes a SpecialDiscountCalculator instance by taking a SpecialDiscountList instance as input.
-        public SpecialDiscountCalculator(SpecialDiscountList SpecialDiscountList)
+        public SpecialDiscountCalculator(SpecialDiscountList1 SpecialDiscountList)
         {
             this.SpecialDiscountList = SpecialDiscountList;
             Validate(); //Validates the SpecialDiscountList before creating a SpecialDiscountCalculator instance.
