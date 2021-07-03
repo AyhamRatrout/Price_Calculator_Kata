@@ -3,7 +3,6 @@ using Extension_Library;
 
 namespace Price_Calculator_Classes
 {
-    //This class is responsible for generating a purchase receipt for a given ShoppingCart instance.
     public class Receipt 
     {
         //Field that stores the ShoppingCart instance for a Receipt instance.
@@ -15,8 +14,8 @@ namespace Price_Calculator_Classes
         */
         public Receipt(ShoppingCart shoppingCart)
         {
+            Validate(shoppingCart);
             this.ShoppingCart = shoppingCart;
-            Validate();
         }
 
         //Generates and prints the Receipt instance by calling the GenerateReceipt helper method.
@@ -61,7 +60,7 @@ namespace Price_Calculator_Classes
             Formatter.AlignLeftRight("Product", "Price");
             Formatter.AddLine();
 
-            foreach(var product in this.ShoppingCart.ListOfProducts)
+            foreach(var product in this.ShoppingCart)
             {
                 Formatter.AlignLeftRight(product.Name, "$" + product.Price.ToString());
             }
@@ -77,13 +76,14 @@ namespace Price_Calculator_Classes
             Formatter.AlignLeftRight("Subtotal:", "$" + Math.Round(this.ShoppingCart.Subtotal, 2).ToString());
             Formatter.AlignLeftRight("Total Tax Amount:", "$" + Math.Round(this.ShoppingCart.TotalTax, 2).ToString());
             Formatter.AlignLeftRight("Total Discount Amount:", "$" + Math.Round(this.ShoppingCart.TotalDiscount, 2).ToString());
+            Formatter.AlignLeftRight("Total Additional Costs:", "$" + Math.Round(this.ShoppingCart.TotalAdditionalCosts, 2));
             Formatter.AlignLeftRight("Total:", "$" + Math.Round(this.ShoppingCart.Total, 2).ToString());
         }
 
         //Helper method validates that a Receipt's ShoppingCart field (provided by user) is not null. Throws an ArgumentException if it is.
-        private void Validate()
+        private void Validate(ShoppingCart shoppingCart)
         {
-            if(this.ShoppingCart == null)
+            if(shoppingCart == null)
             {
                 throw new NullReferenceException("Invalid input! Please make sure that the ShoppingCart you are passing is NOT null.");
             }

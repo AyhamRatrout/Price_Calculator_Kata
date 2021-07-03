@@ -1,45 +1,31 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Price_Calculator_Classes
 {
-    //This class represents a shopping cart which a buyer can add products to or remove exisitng products from.
-    public class ShoppingCart
+    public class ShoppingCart: IEnumerable<Product>
     {
-
-        //List of Product that keeps track of the Products in a shopping cart instance.
-        public List<Product> ListOfProducts {get; private set;}
-
-        //A ShoppingCart instance needs a PriceCalculator instance to updates the total when a Product is added to or removed from the cart.
+        private List<Product> ListOfProducts;
         public PriceCalculator PriceCalculator{get; private set;}
-
-        //Keeps track of the total price of all the products in a shopping cart instance before any adjustments are made.
         public double Subtotal{get; private set;}
-        
-        //Keeps track of the total tax to be paid on a ShoppingCart's products.
         public double TotalTax{get; private set;}
-        
-        //Keeps track of the total discount amounts applied to a ShoppingCart's products.
         public double TotalDiscount{get; private set;}
-        
-        //Keeps track of the Total amount to be paid on a ShoppingCart instance after adjustments have been applied.
         public double Total{get; private set;}
+        public double TotalAdditionalCosts{get; private set;}
 
-        /*
-            Class constructor initializes a ShoppingCart instance by taking in a PriceCalculator instance as input and creating an empty List of
-            Products. Validates the PriceCalculator instance before creating the ShoppingCart instance.
-        */
-        public ShoppingCart(PriceCalculator priceCalculator)
+        public int Count
         {
-            this.PriceCalculator = priceCalculator;
-            ValidateCalculator();
-            this.ListOfProducts = new List<Product>();
+            get{return this.ListOfProducts.Count;}
         }
 
-        /*
-            Adds a product to a shopping cart instance and updates the ShoppingCart's Total fields.
-            Throws an ArgumentException if the product is null.
-        */
+        public ShoppingCart(PriceCalculator priceCalculator)
+        {
+            this.ListOfProducts = new List<Product>();
+            Validate(priceCalculator);
+            this.PriceCalculator = priceCalculator;
+        }
+
         public void Add(Product product)
         {
             if(product == null)
@@ -53,10 +39,16 @@ namespace Price_Calculator_Classes
             }
         }
 
-        /*
-            Removes a product from a shopping cart instance if the product exists and updates the ShoppingCart's total fields.
-            Prints an error message if the product does not exist.
-        */
+        private void IncrementTotals(Product product)
+        {
+            this.Subtotal += product.Price;
+            var BeforeTaxDiscounts = this.PriceCalculator.BeforeTaxDiscountCalculator.Calculate(product);
+            this.TotalTax += this.PriceCalculator.TaxCalculator.CalculateTaxAmount(product.Price - BeforeTaxDiscounts);
+            this.TotalDiscount += (BeforeTaxDiscounts + this.PriceCalculator.AfterTaxDiscountCalculator.Calculate(product.Price - BeforeTaxDiscounts, product));
+            this.TotalAdditionalCosts += AdditionalCostsCalculator.CalculateAdditionalCosts(product);
+            this.Total += this.PriceCalculator.CalculatePrice(product);
+        }
+
         public void Remove(Product product)
         {
             if(this.ListOfProducts.Contains(product))
@@ -70,35 +62,47 @@ namespace Price_Calculator_Classes
             }
         }
 
-        //Helper method increments the four Total fields when called. Gets called every time a Product is added to the ShoppingCart.
-        private void IncrementTotals(Product product)
-        {
-            this.Subtotal += product.Price;
-            this.TotalTax += this.PriceCalculator.TaxCalculator.CalculateTaxAmount(product);
-            this.TotalDiscount += this.PriceCalculator.DiscountCalculator.CalculateDiscountAmount(product);
-            this.Total += this.PriceCalculator.CalculatePrice(product);
-
-        }
-
-        //Helper method decrements the four Total fields when called. Gets called every time a Product is removed from the ShoppingCart.
         private void DecrementTotals(Product product)
         {
             this.Subtotal -= product.Price;
-            this.TotalTax -= this.PriceCalculator.TaxCalculator.CalculateTaxAmount(product);
-            this.TotalDiscount -= this.PriceCalculator.DiscountCalculator.CalculateDiscountAmount(product);
+            var BeforeTaxDiscounts = this.PriceCalculator.BeforeTaxDiscountCalculator.Calculate(product);
+            this.TotalTax -= this.PriceCalculator.TaxCalculator.CalculateTaxAmount(product.Price - BeforeTaxDiscounts);
+            this.TotalDiscount -= BeforeTaxDiscounts + this.PriceCalculator.AfterTaxDiscountCalculator.Calculate(product.Price - BeforeTaxDiscounts, product);
+            this.TotalAdditionalCosts += AdditionalCostsCalculator.CalculateAdditionalCosts(product);
             this.Total -= this.PriceCalculator.CalculatePrice(product);
         }
 
-        /*
-            Helper method validates the PriceCalculator instance passed in to a ShoppingCart instance before creating one.
-            Throws an ArgumentException if the PriceCalculator is null.
-        */
-        private void ValidateCalculator()
+        public void Clear()
         {
-            if(this.PriceCalculator == null)
+            this.ListOfProducts.Clear();
+        }
+
+        public bool Contains(Product product)
+        {
+            if(this.ListOfProducts.Contains(product))
             {
-                throw new ArgumentException("Operation failed! Please make sure that you are not providing a null PriceCalculator instance.");
+                return true;
+            }
+            return false;
+        }
+
+        public IEnumerator<Product> GetEnumerator()
+        {
+            return this.ListOfProducts.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return this.GetEnumerator();
+        }
+
+        private void Validate(PriceCalculator priceCalculator)
+        {
+            if(priceCalculator == null)
+            {
+                throw new ArgumentException("Operation failed! Please make sure that the PriceCalculator you are providing is not null.");
             }
         }
     }
 }
+

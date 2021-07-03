@@ -15,8 +15,8 @@ namespace Price_Calculator_Classes
         */
         public Report(ShoppingCart shoppingCart)
         {
+            Validate(shoppingCart);
             this.ShoppingCart = shoppingCart;
-            Validate();
         }
 
         //Allows the user to generate a Report for their purchases. Calls the GenerateReport method and displays the information to the console.
@@ -34,74 +34,116 @@ namespace Price_Calculator_Classes
         {
             GenerateHeader();
 
-            foreach(var product in this.ShoppingCart.ListOfProducts)
+            foreach(var product in this.ShoppingCart)
             {
                 //Prints a Product's name, UPC, and price to the console.
                 Console.WriteLine($"Product Name: {product.Name}, Product UPC: {product.UPC}, Product Price: ${product.Price :N2}");
                 
-                GenerateTaxReport(this.ShoppingCart.PriceCalculator.TaxCalculator, product);
+                GenerateBeforeTaxDiscountsReport(this.ShoppingCart.PriceCalculator.BeforeTaxDiscountCalculator, product);
+                
+                GenerateTaxReport(this.ShoppingCart.PriceCalculator.TaxCalculator, product.Price - this.ShoppingCart.PriceCalculator.BeforeTaxDiscountCalculator.Calculate(product));
+                
+                GenerateAfterTaxDiscountReport(this.ShoppingCart.PriceCalculator.AfterTaxDiscountCalculator, product.Price - this.ShoppingCart.PriceCalculator.BeforeTaxDiscountCalculator.Calculate(product), product);
+               
+                Console.WriteLine($"Total discounts applied to this product add up to: ${this.ShoppingCart.PriceCalculator.BeforeTaxDiscountCalculator.Calculate(product) + this.ShoppingCart.PriceCalculator.AfterTaxDiscountCalculator.Calculate(product.Price - this.ShoppingCart.PriceCalculator.BeforeTaxDiscountCalculator.Calculate(product), product)}");
 
-                GenerateDiscountReport(this.ShoppingCart.PriceCalculator.DiscountCalculator, product);
-
+                GenerateAdditionalCostsReport(product);
+                
                 Console.WriteLine($"Price after adjustments were applied: ${this.ShoppingCart.PriceCalculator.CalculatePrice(product)}");
                 
-                Console.WriteLine();
+                Formatter.AddLine();
+                
+                Formatter.AddLine();
             }
         }
 
         //Helper method takes care of generating a header for a Report instance.
         private void GenerateHeader()
         {
-            Console.WriteLine();
-            Console.WriteLine();
+            Formatter.AddLine();
+            Formatter.AddLine();
             Formatter.AlignCenter("Purchases Report");
             Formatter.AlignCenter(DateTime.Now.ToString());
-            Console.WriteLine();
+            Formatter.AddLine();
+        }
+
+        private void GenerateBeforeTaxDiscountsReport(BeforeTaxDiscountCalculator beforeTaxDiscountCalculator, Product product)
+        {
+            if(beforeTaxDiscountCalculator.RelativeDiscountCalculator.RelativeDiscountList.Count == 0 && beforeTaxDiscountCalculator.SpecialDiscountCalculator.SpecialDiscountList.Count == 0)
+            {
+                Console.WriteLine("No before-tax discounts were applied to this product.");
+            }
+            else
+            {
+                foreach(var relativeDiscount in beforeTaxDiscountCalculator.RelativeDiscountCalculator.RelativeDiscountList)
+                {
+                    Console.WriteLine($"Before-tax relative discount was reported at: {relativeDiscount.Discount}% which deducts ${beforeTaxDiscountCalculator.RelativeDiscountCalculator.Calculate(product) :N2} from the product's price.");
+                }
+                foreach(var specialDiscount in beforeTaxDiscountCalculator.SpecialDiscountCalculator.SpecialDiscountList)
+                {
+                    if(beforeTaxDiscountCalculator.SpecialDiscountCalculator.SpecialDiscountList.Contains(product.UPC))
+                    {
+                        Console.WriteLine($"Congratulations! This product qualifies for a before-tax special discount of: {specialDiscount.Discount}% which deducts ${beforeTaxDiscountCalculator.SpecialDiscountCalculator.Calculate(product) :N2} from the product's price.");
+                    }
+                }
+                Console.WriteLine($"Total before-tax discount amount comes out to: ${beforeTaxDiscountCalculator.Calculate(product) :N2}");
+            }
         }
 
         //Helper method calculates and displays the Tax percentage and amount applied to each product. Prints the results to the console.
-        private void GenerateTaxReport(TaxCalculator taxCalculator, Product product)
+        private void GenerateTaxReport(TaxCalculator taxCalculator, double Price)
         {
-            Console.WriteLine($"Tax was reported at: {taxCalculator.Tax}% which adds ${taxCalculator.CalculateTaxAmount(product) :N2} to the product's price.");
+            Console.WriteLine($"Tax was reported at: {taxCalculator.Tax}% which adds ${taxCalculator.CalculateTaxAmount(Price) :N2} to the product's price.");
         }
 
-        //Helper method takes care of generating a detailed report of the various discounts and their amounts applied to each product (if any).
-        public void GenerateDiscountReport(DiscountCalculator discountCalculator, Product product)
+        private void GenerateAfterTaxDiscountReport(AfterTaxDiscountCalculator afterTaxDiscountCalculator, double Price, Product product)
         {
-            //If no discounts are applied to a product, prints a message with this information to the console. 
-            if(discountCalculator.RelativeDiscountCalculator.Discount == 0.00 && discountCalculator.SpecialDiscountCalculator.SpecialDiscountList.DiscountList.Count == 0)
+            if(afterTaxDiscountCalculator.RelativeDiscountCalculator.RelativeDiscountList.Count == 0 && afterTaxDiscountCalculator.SpecialDiscountCalculator.SpecialDiscountList.Count == 0)
             {
-                Console.WriteLine("No discounts were applied to your shopping cart.");
+                Console.WriteLine("No after-tax discounts were applied to this product.");
             }
-
             else
             {
-                //If a relative discount was applied to a ShoppingCart, it prints the amount discounted from each product in the cart to the console.
-                if(discountCalculator.RelativeDiscountCalculator.Discount != 0)
+                foreach(var relativeDiscount in afterTaxDiscountCalculator.RelativeDiscountCalculator.RelativeDiscountList)
                 {
-                    Console.WriteLine($"Relative discount was reported at {discountCalculator.RelativeDiscountCalculator.Discount}% which deducts ${discountCalculator.RelativeDiscountCalculator.CalculateDiscountAmount(product) :N2} from this product's price.");
+                    Console.WriteLine($"After-tax relative discount was reported at: {relativeDiscount.Discount}% which deducts ${afterTaxDiscountCalculator.RelativeDiscountCalculator.Calculate(Price, product) :N2} from the product's price.");
                 }
-
-                //If a product qualifies for further discounts, prints to the console that this porduct qualifies for a special discount and the discount's amount.
-                if(discountCalculator.SpecialDiscountCalculator.SpecialDiscountList.ContainsKey(product.UPC))
+                foreach(var specialDiscount in afterTaxDiscountCalculator.SpecialDiscountCalculator.SpecialDiscountList)
                 {
-                    Console.WriteLine($"Congratulations! This product qualifies for a special discount of {discountCalculator.SpecialDiscountCalculator.SpecialDiscountList.DiscountList[product.UPC]}% which deducts ${discountCalculator.SpecialDiscountCalculator.CalculateDiscountAmount(product) :N2} from this product's price.");
+                    if(afterTaxDiscountCalculator.SpecialDiscountCalculator.SpecialDiscountList.Contains(product.UPC))
+                    {
+                        Console.WriteLine($"Congratulations! This product qualifies for a after-tax special discount of: {specialDiscount.Discount}% which deducts ${afterTaxDiscountCalculator.SpecialDiscountCalculator.Calculate(Price, product) :N2} from the product's price.");
+                    }
                 }
-            }
-
-            //if any discounts were applied to a product, notifies the user by displaying a message of the total discount amount applied to that specific product to the console.
-            if(discountCalculator.RelativeDiscountCalculator.Discount != 0.00 && discountCalculator.SpecialDiscountCalculator.SpecialDiscountList.DiscountList.Count != 0)
-            {
-                Console.WriteLine($"Total discounts applied to this product amount to ${discountCalculator.CalculateDiscountAmount(product) :N2}");                
+                Console.WriteLine($"Total after-tax discount amount comes out to: ${afterTaxDiscountCalculator.Calculate(Price, product) :N2}");
             }            
         }
 
-        //Helper method validataes the ShoppingCart instance passed to a Report instance. Throws an ArgumentException if the ShoppingCart is null.
-        private void Validate()
+        private void GenerateAdditionalCostsReport(Product product)
         {
-            if(this.ShoppingCart == null)
+            if(product.ListOfCosts.Count != 0)
             {
-                throw new ArgumentException("Invalid input! Please make sure that the ShoppingCart you are passing is NOT null.");
+                Console.WriteLine("Additional costs on this product include:");
+                foreach(var additionalCost in product.ListOfCosts)
+                {
+                    if(additionalCost.AmountType == AmountType.Absolute)
+                    {
+                        Console.WriteLine($"\t{additionalCost.Description}: ${additionalCost.Amount}");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"\t{additionalCost.Description}: ${Math.Round(product.Price * ArithmeticExtensions.PercentageToDecimal(additionalCost.Amount), 2)}");          
+                    }
+                }
+            }
+        }
+
+        //Helper method validataes the ShoppingCart instance passed to a Report instance. Throws an ArgumentException if the ShoppingCart is null.
+        private void Validate(ShoppingCart shoppingCart)
+        {
+            if(shoppingCart == null)
+            {
+                throw new ArgumentException("Invalid input! Please make sure that you are not providing a null ShoppingCart.");
             }
         }
         

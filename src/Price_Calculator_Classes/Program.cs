@@ -7,175 +7,67 @@ namespace Price_Calculator_Classes
     {
         static void Main(string[] args)
         {
-            TestWithDefaultTaxNoDiscountsApplied();
-            TestWithDefaultTaxRelativeDiscountApplied();
-            TestWithDefaultTaxUPCSpecificDiscountApplied();
-            TestWithDefaultTaxBothDiscountsApplied();
-            TestWithCustomTaxNoDiscountsApplied();
-            TestWithCustomTaxRelativeDiscountApplied();
-            TestWithCustomTaxUPCSpecificDiscountApplied();
-            TestWithCustomTaxBothDiscountsApplied();
-        }
-
-        
-        //Tests case 1: Default Tax and no discounts
-        private static void TestWithDefaultTaxNoDiscountsApplied()
-        {
-            var taxCalculator = new TaxCalculator();
-            var discountCalculator = new DiscountCalculator(new RelativeDiscountCalculator(), new SpecialDiscountCalculator(new SpecialDiscountList1()));
-            var PriceCalculator = new PriceCalculator(taxCalculator, discountCalculator);
-
-            var shoppingCart = new ShoppingCart(PriceCalculator);
-            shoppingCart.Add(new Product("Apples", 11223344, 17.25));
-            shoppingCart.Add(new Product("Bananas", 1122331, 20.25));
-            shoppingCart.Add(new Product("Lofas", 1122331, 14.25));
-            shoppingCart.Add(new Product("Orbees", 1122331, 10.25));
-
-            var receipt = new Receipt(shoppingCart);
-            receipt.Print();
-            var report = new Report(shoppingCart);
-            report.Print();
-        }
-
-        //Tests case 2: Default Tax and a reative discount
-        private static void TestWithDefaultTaxRelativeDiscountApplied()
-        {
-            var taxCalculator = new TaxCalculator();
-            var discountCalculator = new DiscountCalculator(new RelativeDiscountCalculator(10), new SpecialDiscountCalculator(new SpecialDiscountList1()));
-            var PriceCalculator = new PriceCalculator(taxCalculator, discountCalculator);
-
-            var shoppingCart = new ShoppingCart(PriceCalculator);
-            shoppingCart.Add(new Product("Apples", 11223344, 17.25));
-            shoppingCart.Add(new Product("Bananas", 1122331, 20.25));
-            shoppingCart.Add(new Product("Lofas", 1122331, 14.25));
-            shoppingCart.Add(new Product("Orbees", 1122331, 10.25));
-
-            var receipt = new Receipt(shoppingCart);
-            receipt.Print();
-            var report = new Report(shoppingCart);
-            report.Print();
-        }
-
-        //Tests case 3: Default Tax and a UPC specific special discount
-        private static void TestWithDefaultTaxUPCSpecificDiscountApplied()
-        {
-            var taxCalculator = new TaxCalculator();
-            var specialDiscountList = new SpecialDiscountList1();
-            specialDiscountList.Add(1122331, 15);
-            var discountCalculator = new DiscountCalculator(new RelativeDiscountCalculator(), new SpecialDiscountCalculator(specialDiscountList));
-            var PriceCalculator = new PriceCalculator(taxCalculator, discountCalculator);
-
-            var shoppingCart = new ShoppingCart(PriceCalculator);
-            shoppingCart.Add(new Product("Apples", 11223344, 17.25));
-            shoppingCart.Add(new Product("Bananas", 1122331, 20.25));
-            shoppingCart.Add(new Product("Lofas", 1122331, 14.25));
-            shoppingCart.Add(new Product("Orbees", 1122331, 10.25));
-
-            var receipt = new Receipt(shoppingCart);
-            receipt.Print();
-            var report = new Report(shoppingCart);
-            report.Print();
-        }
-
-        //Tests case 4: Default Tax and both discounts (relative and special) applied
-        private static void TestWithDefaultTaxBothDiscountsApplied()
-        {
-            var taxCalculator = new TaxCalculator();
-            var specialDiscountList = new SpecialDiscountList1();
-            specialDiscountList.Add(1122331, 15);
-            var discountCalculator = new DiscountCalculator(new RelativeDiscountCalculator(10), new SpecialDiscountCalculator(specialDiscountList));
-            var PriceCalculator = new PriceCalculator(taxCalculator, discountCalculator);
-
-            var shoppingCart = new ShoppingCart(PriceCalculator);
-            shoppingCart.Add(new Product("Apples", 11223344, 17.25));
-            shoppingCart.Add(new Product("Bananas", 1122331, 20.25));
-            shoppingCart.Add(new Product("Lofas", 1122331, 14.25));
-            shoppingCart.Add(new Product("Orbees", 1122331, 10.25));
-
-            var receipt = new Receipt(shoppingCart);
-            receipt.Print();
-            var report = new Report(shoppingCart);
-            report.Print();
-        }
-
-        //Tests case 5: Custom Tax and no discounts
-        private static void TestWithCustomTaxNoDiscountsApplied()
-        {
-             var taxCalculator = new TaxCalculator(25);
-            var discountCalculator = new DiscountCalculator(new RelativeDiscountCalculator(), new SpecialDiscountCalculator(new SpecialDiscountList1()));
-            var PriceCalculator = new PriceCalculator(taxCalculator, discountCalculator);
-
-            var shoppingCart = new ShoppingCart(PriceCalculator);
-            shoppingCart.Add(new Product("Apples", 11223344, 17.25));
-            shoppingCart.Add(new Product("Bananas", 1122331, 20.25));
-            shoppingCart.Add(new Product("Lofas", 1122331, 14.25));
-            shoppingCart.Add(new Product("Orbees", 1122331, 10.25));
-
-            var receipt = new Receipt(shoppingCart);
-            receipt.Print();
-            var report = new Report(shoppingCart);
-            report.Print();
+            TestPriceCalculatorExtremeCase();
         } 
 
-        //Tests case 6: Custom Tax and a reative discount
-        private static void TestWithCustomTaxRelativeDiscountApplied()
-        {
-            var taxCalculator = new TaxCalculator(25);
-            var discountCalculator = new DiscountCalculator(new RelativeDiscountCalculator(10), new SpecialDiscountCalculator(new SpecialDiscountList1()));
-            var PriceCalculator = new PriceCalculator(taxCalculator, discountCalculator);
+       /*
+            Tests that Features 5 and 6 (adding precendence and additional costs) work as they should.
+            Test was succesfull and this method tests the most extreme case (all products having additional costs and special and relative disocunts
+            applied both before and after tax).
+       */
+       public static void TestPriceCalculatorExtremeCase()
+       {
+           //create two discocunt lists: a RelativeDiscountList and a SpecialDiscountList
+           var relativeDiscountList = new RelativeDiscountList();
+           var specialDiscountList = new SpecialDiscountList();
 
-            var shoppingCart = new ShoppingCart(PriceCalculator);
-            shoppingCart.Add(new Product("Apples", 11223344, 17.25));
-            shoppingCart.Add(new Product("Bananas", 1122331, 20.25));
-            shoppingCart.Add(new Product("Lofas", 1122331, 14.25));
-            shoppingCart.Add(new Product("Orbees", 1122331, 10.25));
+           //Add two Discounts to each list (four discounts total). One Discount is applied before tax while the other is applied after tax.
+           relativeDiscountList.Add(new RelativeDiscount(20, Precedence.BeforeTax));
+           relativeDiscountList.Add(new RelativeDiscount(10, Precedence.AfterTax));
+           specialDiscountList.Add(new SpecialDiscount(1122331, 15, Precedence.BeforeTax));
+           specialDiscountList.Add(new SpecialDiscount(1122331, 10, Precedence.AfterTax));
 
-            var receipt = new Receipt(shoppingCart);
-            receipt.Print();
-            var report = new Report(shoppingCart);
-            report.Print();
-        } 
+           //Create a PriceCalculator instance. Set the Tax amount to 25% and pass in the RelativeDiscountList and the SpecialDiscountList from above.
+           var PriceCalculator = new PriceCalculator(25, relativeDiscountList, specialDiscountList);
 
-        //Tests case 7: Custom Tax and a UPC specific special discount
-        private static void TestWithCustomTaxUPCSpecificDiscountApplied()
-        {
-            var taxCalculator = new TaxCalculator(25);
-            var specialDiscountList = new SpecialDiscountList1();
-            specialDiscountList.Add(1122331, 15);
-            var discountCalculator = new DiscountCalculator(new RelativeDiscountCalculator(), new SpecialDiscountCalculator(specialDiscountList));
-            var PriceCalculator = new PriceCalculator(taxCalculator, discountCalculator);
+           //Create different Product instance to be added to the ShoppingCart later in the method.
+           var Apples = new Product("Apples", 11223344, 17.25);
+           var Bananas = new Product("Bananas", 1122331, 20.25);
+           var Lofas = new Product("Lofas", 1122331, 14.25);
+           var Orbees = new Product("Orbees", 1122331, 10.25);
 
-            var shoppingCart = new ShoppingCart(PriceCalculator);
-            shoppingCart.Add(new Product("Apples", 11223344, 17.25));
-            shoppingCart.Add(new Product("Bananas", 1122331, 20.25));
-            shoppingCart.Add(new Product("Lofas", 1122331, 14.25));
-            shoppingCart.Add(new Product("Orbees", 1122331, 10.25));
+           //Add some AdditionalCosts to the Apple Product.
+           Apples.ListOfCosts.Add(new AdditionalCost("Packaging", 10, AmountType.Percentage));
+           Apples.ListOfCosts.Add(new AdditionalCost("Shining", 5, AmountType.Absolute));
+           Apples.ListOfCosts.Add(new AdditionalCost("Washing", 2, AmountType.Absolute));
 
-            var receipt = new Receipt(shoppingCart);
-            receipt.Print();
-            var report = new Report(shoppingCart);
-            report.Print();
-        }
+           //Add some AdditionalCosts to the Bananas Product.
+           Bananas.ListOfCosts.Add(new AdditionalCost("Packaging", 10, AmountType.Percentage));
+           Bananas.ListOfCosts.Add(new AdditionalCost("Shipping", 5, AmountType.Absolute));
+           Bananas.ListOfCosts.Add(new AdditionalCost("Administritive costs", 2, AmountType.Absolute));
 
-        //Tests case 8: Default Tax and both discounts (relative and special) applied
-        private static void TestWithCustomTaxBothDiscountsApplied()
-        {
-            var taxCalculator = new TaxCalculator(25);
-            var specialDiscountList = new SpecialDiscountList1();
-            specialDiscountList.Add(1122331, 15);
-            var discountCalculator = new DiscountCalculator(new RelativeDiscountCalculator(10), new SpecialDiscountCalculator(specialDiscountList));
-            var PriceCalculator = new PriceCalculator(taxCalculator, discountCalculator);
+           //Add some AdditionalCosts to the Lofas Product.
+           Lofas.ListOfCosts.Add(new AdditionalCost("Packaging", 10, AmountType.Percentage));
+           Lofas.ListOfCosts.Add(new AdditionalCost("Shipping", 5, AmountType.Absolute));
+           Lofas.ListOfCosts.Add(new AdditionalCost("Marketing", 2, AmountType.Absolute));
 
-            var shoppingCart = new ShoppingCart(PriceCalculator);
-            shoppingCart.Add(new Product("Apples", 11223344, 17.25));
-            shoppingCart.Add(new Product("Bananas", 1122331, 20.25));
-            shoppingCart.Add(new Product("Lofas", 1122331, 14.25));
-            shoppingCart.Add(new Product("Orbees", 1122331, 10.25));
+           //Add some AdditionalCosts to the Orbees Product.
+           Orbees.ListOfCosts.Add(new AdditionalCost("Packaging", 10, AmountType.Percentage));
+           Orbees.ListOfCosts.Add(new AdditionalCost("Shipping", 5, AmountType.Absolute));
+           Orbees.ListOfCosts.Add(new AdditionalCost("Fun cost", 2, AmountType.Absolute));
 
-            var receipt = new Receipt(shoppingCart);
-            receipt.Print();
-            var report = new Report(shoppingCart);
-            report.Print();
+           //Create a ShoppingCart instance and populate it with the items (Products) initialized above.
+           var shoppingCart = new ShoppingCart(PriceCalculator);
+           shoppingCart.Add(Apples);
+           shoppingCart.Add(Bananas);
+           shoppingCart.Add(Lofas);
+           shoppingCart.Add(Orbees);
+
+           //Generate a Receipt and a Report for the ShoppingCart to view the results of the different calculations.
+           var receipt = new Receipt(shoppingCart);
+           receipt.Print();
+           var report = new Report(shoppingCart);
+           report.Print();
         }
     }
 }

@@ -7,8 +7,7 @@ namespace Price_Calculator_Classes
         public string Name{get; private set;} //Each product has a name
         public int UPC{get; private set;} //Each product has a UPC
         public double Price{get; private set;} //Each product has a price
-
-        //public double PriceAfterAdjustments{get;private set;}
+        public AdditionalCostsList ListOfCosts{get; private set;}
 
         //Class constructor initializes a Product instance when provided a Name, UPC, and a Price
         public Product(string Name, int UPC, double Price)
@@ -16,6 +15,16 @@ namespace Price_Calculator_Classes
             this.Name = Name;
             this.UPC = UPC;
             this.Price = Math.Round(Price, 2);
+            this.ListOfCosts = new AdditionalCostsList();
+            Validate(); //validates the values above before creating a Product instance
+        }
+
+        public Product(string Name, int UPC, double Price, AdditionalCostsList ListOfCosts)
+        {
+            this.Name = Name;
+            this.UPC = UPC;
+            this.Price = Math.Round(Price, 2);
+            this.ListOfCosts = ListOfCosts;
             Validate(); //validates the values above before creating a Product instance
         }
 
@@ -28,11 +37,14 @@ namespace Price_Calculator_Classes
                 {
                     if(this.Price > 0)
                     {
-                        return;
+                        if(this.ListOfCosts != null)
+                        {
+                            return;
+                        }
                     }
                 }
             }
-            throw new ArgumentException("Invalid inputs! Please make sure that the product's name is not null, empty, or whitespace, the product's UPC is greater than zero, and the product's price is also greater than zero...");
+            throw new ArgumentException("Invalid inputs! Please make sure that the product's name is not null, empty, or whitespace, the product's UPC is greater than zero, the product's price is also greater than zero, and that the AdditionalCostList you are providing is not null.");
         }
     }
 }

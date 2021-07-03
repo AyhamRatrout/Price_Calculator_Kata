@@ -4,9 +4,8 @@ namespace Price_Calculator_Classes
 {
     /*
         This class allows the user to define a SpecialDiscount instance using a UPC, Discount, and Precedence.
-        Implements the IValidate interface and overrides its only method.
     */
-    public class SpecialDiscount: IValidate
+    public class SpecialDiscount
     {
         //Each SpecialDiscount instance must have a UPC that defines the Products this Discount applies to.
         public int UPC{get; private set;} 
@@ -31,7 +30,7 @@ namespace Price_Calculator_Classes
         }
 
         //Validates a SpecialDiscount properties for acceptability. Throws an ArgumentException if invalid.
-        public void Validate()
+        private void Validate()
         {
             if(this.UPC <= 0 || this.Discount < 0 || this.Discount > 100)
             {
