@@ -3,7 +3,7 @@ using Extension_Library;
 
 namespace Price_Calculator_Classes
 {
-    //This class deines a TaxCalculator type which calculates the TaxAmount to be applied to a given Product.
+    //This class deines a TaxCalculator type which calculates the TaxAmount to be applied to a given Product instance.
     public class TaxCalculator
     {
         //Stores the Tax percentage associated with a TaxCalculator instance.
@@ -22,7 +22,7 @@ namespace Price_Calculator_Classes
             this.Tax = Tax;
         }
 
-        //Calculates and returns the tax amount applied to a Product to two decimal places. Takes the Price (double) of the Product as input.
+        //Calculates and returns the tax amount applied to a Product to two decimal places. Takes a Price (double) as input.
         public double CalculateTaxAmount(double Price)
         {
             return Math.Round((Price * ArithmeticExtensions.PercentageToDecimal(this.Tax)), 2);

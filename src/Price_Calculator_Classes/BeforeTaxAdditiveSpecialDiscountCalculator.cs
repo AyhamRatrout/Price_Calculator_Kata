@@ -4,18 +4,19 @@ using Extension_Library;
 namespace Price_Calculator_Classes
 {
     /*
-        This class represents a BeforeTaxSpecialDiscountCalculator type. It is used to calculate the amount of SpecialDiscounts
-        that have a Precendence of (to be applied) before Tax or any other Discounts.
+        This class represents a BeforeTaxAdditiveSpecialDiscountCalculator type. It is used to calculate the amount of SpecialDiscounts
+        that have a Precendence of (to be applied) before Tax or any other Discounts and that are being applied Additively.
 
         To accomplish this, this class uses a List of all the SpecialDiscounts as well as a Filterer instance to find all the 
-        SpecialDiscounts whose Precedence is before Tax and apply them to the Product provided.
+        SpecialDiscounts whose Precedence is before Tax and apply them to the Product provided Additively.
 
-        Implements the IBeforeTaxCalculator interface and provides an implementation for its Calculate() method.
-
-        Implements the ISpecialDiscountCalculator interface and provides implementations to its SpecialDiscountList property,
-        SpecialDiscountListFilterer property, and its Validate() method.
+        Implements the ISpecialDiscountCalculator interface and provides implementations for its following members:
+            1. SpecialDiscountList property.
+            2. SpecialDiscountListFilterer property.
+            3. Calulate(Product, double) method.
+            4. Validate(SpecialDiscountList) method.      
     */
-    public class BeforeTaxSpecialDiscountCalculator : IBeforeTaxCalculator, ISpecialDiscountCalculator
+    public class BeforeTaxAdditiveSpecialDiscountCalculator : ISpecialDiscountCalculator
     {
         //Stores a List of all the SpecialDiscounts applied to a ShoppingCart instance. This List is provided by the user.                
         public SpecialDiscountList SpecialDiscountList { get; private set; }
@@ -24,13 +25,13 @@ namespace Price_Calculator_Classes
         public SpecialDiscountListFilterer Filterer { get; private set; }
 
         /*
-            Class constructor initializes a BeforeTaxSpecialDiscountCalculator instance provided a 
+            Class constructor initializes a BeforeTaxAdditiveSpecialDiscountCalculator instance provided a 
             List of all the SpecialDiscounts applied to a ShoppingCart instance.
 
             Validates the provided SpecialDiscountList before initializing a new SpecialDiscountListFilterer 
             instance and creating a new instance of this class.
         */
-        public BeforeTaxSpecialDiscountCalculator(SpecialDiscountList specialDiscountList)
+        public BeforeTaxAdditiveSpecialDiscountCalculator(SpecialDiscountList specialDiscountList)
         {
             Validate(specialDiscountList);
             this.Filterer = new SpecialDiscountListFilterer(specialDiscountList);
@@ -38,17 +39,16 @@ namespace Price_Calculator_Classes
         }
 
         /*
-            Calculates and returns the SpecialDiscount amounts to be applied to a Product before Tax.
-            An implementation of IBeforeTaxCalculator's Calculate() method.
+            Calculates and returns the SpecialDiscount amounts to be applied to a Product before Tax, Additively.
         */
-        public double Calculate(Product product)
+        public double Calculate(Product product, double Price)
         {
             var specialDiscountAmount = 0.00;
             foreach (var specialDiscount in this.SpecialDiscountList)
             {
                 if (specialDiscount.UPC == product.UPC)
                 {
-                    specialDiscountAmount += (product.Price * ArithmeticExtensions.PercentageToDecimal(specialDiscount.Discount));
+                    specialDiscountAmount += (Price * ArithmeticExtensions.PercentageToDecimal(specialDiscount.Discount));
                 }
             }
             return specialDiscountAmount;

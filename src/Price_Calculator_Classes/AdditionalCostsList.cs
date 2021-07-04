@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Extension_Library;
 
 namespace Price_Calculator_Classes
 {

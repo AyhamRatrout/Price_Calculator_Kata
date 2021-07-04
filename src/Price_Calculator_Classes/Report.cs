@@ -9,7 +9,6 @@ namespace Price_Calculator_Classes
 
         This allows the user to view each Discount and its amount, each Tax and its amount, and each Additional cost and its amount
         which have been applied to each Product in their ShoppingCart
-
     */
     public class Report
     {
@@ -44,16 +43,16 @@ namespace Price_Calculator_Classes
             //Enumerates over each Product in the provided ShoppingCart instance.
             foreach (var product in this.ShoppingCart)
             {
-                //Prints a Product's name, UPC, and price to the console.
+                //Prints a Product's name, UPC, and Price to the console.
                 Console.WriteLine($"Product Name: {product.Name}, Product UPC: {product.UPC}, Product Price: ${product.Price:N2}");
 
-                GenerateBeforeTaxDiscountsReport(this.ShoppingCart.PriceCalculator.BeforeTaxDiscountCalculator, product);
+                GenerateBeforeTaxDiscountReport(this.ShoppingCart.PriceCalculator.BeforeTaxDiscountCalculator, product);
 
                 GenerateTaxReport(this.ShoppingCart.PriceCalculator.TaxCalculator, product.Price - this.ShoppingCart.PriceCalculator.BeforeTaxDiscountCalculator.Calculate(product));
 
                 GenerateAfterTaxDiscountReport(this.ShoppingCart.PriceCalculator.AfterTaxDiscountCalculator, product.Price - this.ShoppingCart.PriceCalculator.BeforeTaxDiscountCalculator.Calculate(product), product);
 
-                Console.WriteLine($"Total discounts applied to this product add up to: ${this.ShoppingCart.PriceCalculator.BeforeTaxDiscountCalculator.Calculate(product) + this.ShoppingCart.PriceCalculator.AfterTaxDiscountCalculator.Calculate(product.Price - this.ShoppingCart.PriceCalculator.BeforeTaxDiscountCalculator.Calculate(product), product)}");
+                Console.WriteLine($"Total discounts applied to this product add up to: ${this.ShoppingCart.PriceCalculator.BeforeTaxDiscountCalculator.Calculate(product) + this.ShoppingCart.PriceCalculator.AfterTaxDiscountCalculator.Calculate(product, product.Price - this.ShoppingCart.PriceCalculator.BeforeTaxDiscountCalculator.Calculate(product))}");
 
                 GenerateAdditionalCostsReport(product);
 
@@ -75,8 +74,8 @@ namespace Price_Calculator_Classes
             Formatter.AddLine();
         }
 
-        //Helper method calculates and displays each Discount applied to a Product before Tax is applied (if any). Prints the results to the Console.
-        private void GenerateBeforeTaxDiscountsReport(BeforeTaxDiscountCalculator beforeTaxDiscountCalculator, Product product)
+        //Helper method calculates and displays the total Discount amount applied to a Product before Tax is applied (if any). Prints the results to the Console.
+        private void GenerateBeforeTaxDiscountReport(IBeforeTaxDiscountCalculator beforeTaxDiscountCalculator, Product product)
         {
             //If no discounts are applied to the Product, displays a message to the user indicating the latter.
             if (beforeTaxDiscountCalculator.RelativeDiscountCalculator.RelativeDiscountList.Count == 0 && beforeTaxDiscountCalculator.SpecialDiscountCalculator.SpecialDiscountList.Count == 0)
@@ -86,23 +85,8 @@ namespace Price_Calculator_Classes
 
             else
             {
-                //Enumerates over the RelativeDiscountList for a ShoppingCart. Calculates and prints the percentage and amount of each Discount applied to each Product.
-                foreach (var relativeDiscount in beforeTaxDiscountCalculator.RelativeDiscountCalculator.RelativeDiscountList)
-                {
-                    Console.WriteLine($"Before-tax relative discount was reported at: {relativeDiscount.Discount}% which deducts ${beforeTaxDiscountCalculator.RelativeDiscountCalculator.Calculate(product):N2} from the product's price.");
-                }
-
-                //Enumerates over the SpecialDiscountList for a given ShoppingCart.
-                foreach (var specialDiscount in beforeTaxDiscountCalculator.SpecialDiscountCalculator.SpecialDiscountList)
-                {
-                    //If a Product qualifies for a SpecialDiscount, calculates and prints the percentage and amount of the Discount applied to that Product.
-                    if (beforeTaxDiscountCalculator.SpecialDiscountCalculator.SpecialDiscountList.Contains(product.UPC))
-                    {
-                        Console.WriteLine($"Congratulations! This product qualifies for a before-tax special discount of: {specialDiscount.Discount}% which deducts ${beforeTaxDiscountCalculator.SpecialDiscountCalculator.Calculate(product):N2} from the product's price.");
-                    }
-                }
                 //Calcultes and prints the total amount of before-tax discounts applied to each Product in the ShoppingCart.
-                Console.WriteLine($"Total before-tax discount amount comes out to: ${beforeTaxDiscountCalculator.Calculate(product):N2}");
+                Console.WriteLine($"Total before-tax discounts applied to {product.Name}: ${beforeTaxDiscountCalculator.Calculate(product):N2}");
             }
         }
 
@@ -112,8 +96,8 @@ namespace Price_Calculator_Classes
             Console.WriteLine($"Tax was reported at: {taxCalculator.Tax}% which adds ${taxCalculator.CalculateTaxAmount(Price):N2} to the product's price.");
         }
 
-        //Helper method calculates and displays each Discount applied to each Product after Tax is applied (if any). Prints the results to the Console.        
-        private void GenerateAfterTaxDiscountReport(AfterTaxDiscountCalculator afterTaxDiscountCalculator, double Price, Product product)
+        //Helper method calculates and displays the total Discount amount applied to each Product after Tax is applied (if any). Prints the results to the Console.        
+        private void GenerateAfterTaxDiscountReport(IAfterTaxDiscountCalculator afterTaxDiscountCalculator, double Price, Product product)
         {
             //If no discounts are applied to the Product, displays a message to the user indicating the latter.
             if (afterTaxDiscountCalculator.RelativeDiscountCalculator.RelativeDiscountList.Count == 0 && afterTaxDiscountCalculator.SpecialDiscountCalculator.SpecialDiscountList.Count == 0)
@@ -123,24 +107,8 @@ namespace Price_Calculator_Classes
 
             else
             {
-                //Enumerates over the RelativeDiscountList for a given ShoppingCart. Calculates and prints the percentage and amount of each Discount applied to each Product in the Cart.
-                foreach (var relativeDiscount in afterTaxDiscountCalculator.RelativeDiscountCalculator.RelativeDiscountList)
-                {
-                    Console.WriteLine($"After-tax relative discount was reported at: {relativeDiscount.Discount}% which deducts ${afterTaxDiscountCalculator.RelativeDiscountCalculator.Calculate(Price, product):N2} from the product's price.");
-                }
-
-                //Enumerates over the SpecialDiscountList for a given ShoppingCart.
-                foreach (var specialDiscount in afterTaxDiscountCalculator.SpecialDiscountCalculator.SpecialDiscountList)
-                {
-                    //If a Product qualifies for a SpecialDiscount, calculates and prints the percentage and amount of the SpecialDiscount applied to that Product.                    
-                    if (afterTaxDiscountCalculator.SpecialDiscountCalculator.SpecialDiscountList.Contains(product.UPC))
-                    {
-                        Console.WriteLine($"Congratulations! This product qualifies for a after-tax special discount of: {specialDiscount.Discount}% which deducts ${afterTaxDiscountCalculator.SpecialDiscountCalculator.Calculate(Price, product):N2} from the product's price.");
-                    }
-                }
-
                 //Calcultes and prints the total amount of after-tax discounts applied to each Product in the ShoppingCart.                
-                Console.WriteLine($"Total after-tax discount amount comes out to: ${afterTaxDiscountCalculator.Calculate(Price, product):N2}");
+                Console.WriteLine($"Total after-tax discounts applied to {product.Name}: ${afterTaxDiscountCalculator.Calculate(product, Price):N2}");
             }
         }
 

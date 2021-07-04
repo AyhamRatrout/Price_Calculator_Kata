@@ -4,18 +4,20 @@ using Extension_Library;
 namespace Price_Calculator_Classes
 {
     /*
-        This class represents an AfterTaxRelativeDiscountCalculator type. It is used to calculate the amount of relative Discounts
-        that have a precendence (to be applied) after tax.
+        This class represents an AfterTaxAdditiveRelativeDiscountCalculator type. It is used to calculate the amount of Relative Discounts
+        that have a precendence (to be applied) after Tax and that are being applied Additively.
 
-        To accomplish this, this class uses a List of all the relative discounts as well as a Filterer instance to find all the 
-        Relative Discounts whose Precedence is after tax and apply them to the Product provided.
+        To accomplish this, this class uses a List of all the Relative Discounts as well as a Filterer instance to find all the 
+        Relative Discounts whose Precedence is after Tax and apply them to the Product provided, Additively.
 
-        Implements the IAfterTaxCalculator interface and provides an implementation for its Calculate() method.
+        Implements the IRelativeDiscountCalculator interface and provides implementations for its following members:
+            1. RelativeDiscountList property.
+            2. RelativeDiscountListFilterer property.
+            3. Calulate(Product, double) method.
+            4. Validate(RelativeDiscountList) method.
 
-        Implements the IRelativeDiscountCalculator interface and provides implementations to its RelativeDiscountList property,
-        RelativeDiscountListFilterer property, and its Validate() method.
     */
-    public class AfterTaxRelativeDiscountCalculator : IAfterTaxCalculator, IRelativeDiscountCalculator
+    public class AfterTaxAdditiveRelativeDiscountCalculator : IRelativeDiscountCalculator
     {
         //Stores a List of all the RelativeDiscounts applied to a ShoppingCart instance. This List is provided by the user.
         public RelativeDiscountList RelativeDiscountList { get; private set; }
@@ -24,13 +26,13 @@ namespace Price_Calculator_Classes
         public RelativeDiscountListFilterer Filterer { get; private set; }
 
         /*
-            Class constructor initializes an AfterTaxRelativeDiscountCalculator instance provided a 
+            Class constructor initializes an AfterTaxAdditiveRelativeDiscountCalculator instance provided a 
             List of all the RelativeDiscounts applied to a ShoppingCart instance.
 
             Validates the provided RelativeDiscountList before initializing a new RelativeDiscountListFilterer 
             instance and creating a new instance of this class.
         */
-        public AfterTaxRelativeDiscountCalculator(RelativeDiscountList relativeDiscountList)
+        public AfterTaxAdditiveRelativeDiscountCalculator(RelativeDiscountList relativeDiscountList)
         {
             Validate(relativeDiscountList);
             this.Filterer = new RelativeDiscountListFilterer(relativeDiscountList);
@@ -38,10 +40,9 @@ namespace Price_Calculator_Classes
         }
 
         /*
-            Calculates and returns the RelativeDiscount amount to be applied to a Product after Tax.
-            An implementation of IAfterTaxCalculator's Calculate() method.
+            Calculates and returns the RelativeDiscount amount to be applied to a Product after Tax, Additively.
         */
-        public double Calculate(double Price, Product product)
+        public double Calculate(Product product, double Price)
         {
             var relativeDiscountAmount = 0.00;
             foreach (var relativeDiscount in this.RelativeDiscountList)
