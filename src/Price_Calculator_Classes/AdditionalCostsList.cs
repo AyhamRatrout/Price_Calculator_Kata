@@ -14,15 +14,15 @@ namespace Price_Calculator_Classes
         This class has some, but not all, of the List type capabilities (methods and properties) but it is 
         designed to serve this project only.
     */
-    public class AdditionalCostsList: IEnumerable<AdditionalCost>
+    public class AdditionalCostsList : IEnumerable<AdditionalCost>
     {
         //Stores a List of AdditionalCost instances and represents the underlying structure to this custom Collection.
         private List<AdditionalCost> ListOfCosts;
-        
+
         //Property exposes the number of items in an AdditionalCostList instance.
         public int Count
         {
-            get{return this.ListOfCosts.Count;}
+            get { return this.ListOfCosts.Count; }
         }
 
         /*
@@ -42,7 +42,7 @@ namespace Price_Calculator_Classes
         public void Add(AdditionalCost additionalCost)
         {
             Validate(additionalCost);
-            if(!this.ListOfCosts.Contains(additionalCost))
+            if (!this.ListOfCosts.Contains(additionalCost))
             {
                 this.ListOfCosts.Add(additionalCost);
             }
@@ -60,7 +60,7 @@ namespace Price_Calculator_Classes
         public void Remove(AdditionalCost additionalCost)
         {
             Validate(additionalCost);
-            if(this.ListOfCosts.Contains(additionalCost))
+            if (this.ListOfCosts.Contains(additionalCost))
             {
                 this.ListOfCosts.Remove(additionalCost);
             }
@@ -76,7 +76,7 @@ namespace Price_Calculator_Classes
         */
         public bool Contains(AdditionalCost additionalCost)
         {
-            if(this.ListOfCosts.Contains(additionalCost))
+            if (this.ListOfCosts.Contains(additionalCost))
             {
                 return true;
             }
@@ -104,7 +104,7 @@ namespace Price_Calculator_Classes
         //Checks an AdditionalCost instance for validity. Throws an ArgumentException if it is null.
         private void Validate(AdditionalCost additionalCost)
         {
-            if(additionalCost == null)
+            if (additionalCost == null)
             {
                 throw new ArgumentException("Invalid input! Please make sure you are not providing a null AdditionalCost instance.");
             }

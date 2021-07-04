@@ -13,7 +13,7 @@ namespace Price_Calculator_Classes
         This class has some, but not all, of the List type capabilities (methods and properties) but it is 
         designed to serve this project only.
     */
-    public class RelativeDiscountList: IEnumerable<RelativeDiscount>
+    public class RelativeDiscountList : IEnumerable<RelativeDiscount>
     {
         //Private field of type List of RelativeDiscount represents the underlying structure to this custom Collection.
         private List<RelativeDiscount> DiscountList;
@@ -21,7 +21,7 @@ namespace Price_Calculator_Classes
         //Property exposes the number of items in a RelativeDiscountList instance.
         public int Count
         {
-            get{return this.DiscountList.Count;}
+            get { return this.DiscountList.Count; }
         }
 
         /*
@@ -41,7 +41,7 @@ namespace Price_Calculator_Classes
         public void Add(RelativeDiscount relativeDiscount)
         {
             Validate(relativeDiscount);
-            if(!this.DiscountList.Contains(relativeDiscount))
+            if (!this.DiscountList.Contains(relativeDiscount))
             {
                 this.DiscountList.Add(relativeDiscount);
             }
@@ -59,7 +59,7 @@ namespace Price_Calculator_Classes
         public void Remove(RelativeDiscount relativeDiscount)
         {
             Validate(relativeDiscount);
-            if(this.DiscountList.Contains(relativeDiscount))
+            if (this.DiscountList.Contains(relativeDiscount))
             {
                 this.DiscountList.Remove(relativeDiscount);
             }
@@ -75,7 +75,7 @@ namespace Price_Calculator_Classes
         */
         public double GetDiscountPercentage(RelativeDiscount relativeDiscount)
         {
-            if(this.DiscountList.Contains(relativeDiscount))
+            if (this.DiscountList.Contains(relativeDiscount))
             {
                 return relativeDiscount.Discount;
             }
@@ -88,7 +88,7 @@ namespace Price_Calculator_Classes
         */
         public bool Contains(RelativeDiscount relativeDiscount)
         {
-            if(this.DiscountList.Contains(relativeDiscount))
+            if (this.DiscountList.Contains(relativeDiscount))
             {
                 return true;
             }
@@ -116,10 +116,10 @@ namespace Price_Calculator_Classes
         //Checks a RelativeDiscount instance for validity. Throws an ArgumentException if it is null.
         private void Validate(RelativeDiscount relativeDiscount)
         {
-            if(relativeDiscount == null)
+            if (relativeDiscount == null)
             {
                 throw new ArgumentException("Invalid input! Please make sure that you are not providing a null RelativeDiscount instance.");
             }
-        } 
+        }
     }
 }

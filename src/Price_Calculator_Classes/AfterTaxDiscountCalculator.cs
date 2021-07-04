@@ -9,20 +9,20 @@ namespace Price_Calculator_Classes
         It implements the IAfterTaxCalculator interface (an interface implemented by every calculator that operates after the Tax calculator)
         and implements its Calculate() method.
     */
-    public class AfterTaxDiscountCalculator: IAfterTaxCalculator
+    public class AfterTaxDiscountCalculator : IAfterTaxCalculator
     {
         /*
             Property stores an AfterTaxRelativeDiscocuntCalculator (a calculator that calculates the relative discounts 
             to be applied to a Product after tax). 
         */
-        public AfterTaxRelativeDiscountCalculator RelativeDiscountCalculator{get; private set;}
-        
+        public AfterTaxRelativeDiscountCalculator RelativeDiscountCalculator { get; private set; }
+
         /*
             Property stores an AfterTaxSpecialDiscocuntCalculator (a calculator that calculates the special discounts 
             to be applied to a Product after tax). 
         */
-        public AfterTaxSpecialDiscountCalculator SpecialDiscountCalculator{get; private set;}
-        
+        public AfterTaxSpecialDiscountCalculator SpecialDiscountCalculator { get; private set; }
+
         /*
             Class constructor initializes an AfterTaxDiscountCalculator instance provided a RelativeDiscountList instance and a SpecialDiscountList
             instance (a list containing the relative discounts and another containing all the special discounts).
@@ -34,9 +34,9 @@ namespace Price_Calculator_Classes
         */
         public AfterTaxDiscountCalculator(RelativeDiscountList relativeDiscountList, SpecialDiscountList specialDiscountList)
         {
-            Validate(relativeDiscountList, specialDiscountList);  
+            Validate(relativeDiscountList, specialDiscountList);
             this.RelativeDiscountCalculator = new AfterTaxRelativeDiscountCalculator(relativeDiscountList);
-            this.SpecialDiscountCalculator = new AfterTaxSpecialDiscountCalculator(specialDiscountList);        
+            this.SpecialDiscountCalculator = new AfterTaxSpecialDiscountCalculator(specialDiscountList);
         }
 
         /*
@@ -51,7 +51,7 @@ namespace Price_Calculator_Classes
         //Validates the RelativeDiscountList and the SpecialDiscountList provided to the class cosntructor. Throws an ArgumentException if either is null.
         private void Validate(RelativeDiscountList relativeDiscountList, SpecialDiscountList specialDiscountList)
         {
-            if(relativeDiscountList == null || specialDiscountList == null)
+            if (relativeDiscountList == null || specialDiscountList == null)
             {
                 throw new ArgumentException("Invalid input! Please make sure that the RelativeDiscountList and the SpecialDiscountList you are providing are not null.");
             }

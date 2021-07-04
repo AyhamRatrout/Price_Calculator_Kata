@@ -8,13 +8,13 @@ namespace Price_Calculator_Classes
     public class SpecialDiscount
     {
         //Each SpecialDiscount instance must have a UPC that defines the Products this Discount applies to.
-        public int UPC{get; private set;} 
-        
+        public int UPC { get; private set; }
+
         //Each SpecialDiscount instance must have a Discount value (percentage) associated with it.
-        public double Discount{get; private set;}
-        
+        public double Discount { get; private set; }
+
         //Each SpecialDiscount instance must have a Precedence which defines when the Discount is applied.
-        public Precedence Precedence{get; private set;}
+        public Precedence Precedence { get; private set; }
 
         /*
             Class constructor initializes a SpecialDiscount instance by taking a UPC value, a Discount 
@@ -32,10 +32,10 @@ namespace Price_Calculator_Classes
         //Validates a SpecialDiscount properties for acceptability. Throws an ArgumentException if invalid.
         private void Validate()
         {
-            if(this.UPC <= 0 || this.Discount < 0 || this.Discount > 100)
+            if (this.UPC <= 0 || this.Discount < 0 || this.Discount > 100)
             {
                 throw new ArgumentException("Invalid input! Please make sure that the UPC value is greater than zero and that the Discount Value is greater then or equal to 0% and less than or equal to 100%");
-            }       
+            }
         }
     }
 }

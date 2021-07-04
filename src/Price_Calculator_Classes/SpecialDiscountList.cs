@@ -13,7 +13,7 @@ namespace Price_Calculator_Classes
         This class has some, but not all, of the List type capabilities (methods and properties) but it is 
         designed to serve this project only.
     */
-    public class SpecialDiscountList: IEnumerable<SpecialDiscount>
+    public class SpecialDiscountList : IEnumerable<SpecialDiscount>
     {
         //Private field of type List of SepcialDiscount represents the underlying structure to this custom Collection.
         private List<SpecialDiscount> DiscountList;
@@ -21,9 +21,9 @@ namespace Price_Calculator_Classes
         //Property exposes the number of items in a SpecialDiscountList instance.
         public int Count
         {
-            get{return this.DiscountList.Count;}
+            get { return this.DiscountList.Count; }
         }
-        
+
         /*
             Class constructor takes no input and initializes a SpecialDiscountList instance by creating a 
             new List<SpecialDiscount> instance.
@@ -41,7 +41,7 @@ namespace Price_Calculator_Classes
         public void Add(SpecialDiscount specialDiscount)
         {
             Validate(specialDiscount);
-            if(!this.DiscountList.Contains(specialDiscount))
+            if (!this.DiscountList.Contains(specialDiscount))
             {
                 this.DiscountList.Add(specialDiscount);
             }
@@ -59,7 +59,7 @@ namespace Price_Calculator_Classes
         public void Remove(SpecialDiscount specialDiscount)
         {
             Validate(specialDiscount);
-            if(this.DiscountList.Contains(specialDiscount))
+            if (this.DiscountList.Contains(specialDiscount))
             {
                 this.DiscountList.Remove(specialDiscount);
             }
@@ -75,9 +75,9 @@ namespace Price_Calculator_Classes
         */
         public bool Contains(int UPC)
         {
-            foreach(var specialDiscount in this.DiscountList)
+            foreach (var specialDiscount in this.DiscountList)
             {
-                if(specialDiscount.UPC == UPC)
+                if (specialDiscount.UPC == UPC)
                 {
                     return true;
                 }
@@ -91,9 +91,9 @@ namespace Price_Calculator_Classes
         */
         public double GetDiscountPercentage(int UPC)
         {
-            foreach(var specialDiscount in this.DiscountList)
+            foreach (var specialDiscount in this.DiscountList)
             {
-                if(specialDiscount.UPC == UPC)
+                if (specialDiscount.UPC == UPC)
                 {
                     return specialDiscount.Discount;
                 }
@@ -122,10 +122,10 @@ namespace Price_Calculator_Classes
         //Checks a SpecialDiscount instance for validity. Throws an ArgumentException if it is null.
         private void Validate(SpecialDiscount specialDiscount)
         {
-            if(specialDiscount == null)
+            if (specialDiscount == null)
             {
                 throw new ArgumentException("Invalid input! Please make sure that you are not providing a null SpecialDiscount instance.");
             }
-        } 
+        }
     }
 }

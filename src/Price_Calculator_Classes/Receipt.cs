@@ -3,14 +3,18 @@ using Extension_Library;
 
 namespace Price_Calculator_Classes
 {
-    public class Receipt 
+    /*
+        This class defines a Receipt type. A Receipt instance can be generated for a given ShoppingCart instance such that it Prints/Displays
+        a purchase Receipt for all the Products in the ShoppingCart, any Taxes, any Discounts, and all the Totals.
+    */
+    public class Receipt
     {
-        //Field that stores the ShoppingCart instance for a Receipt instance.
+        //Stores a ShoppingCart instance based on which a Receipt instance is created.
         private ShoppingCart ShoppingCart;
 
         /*
             Class constructor initializes a Receipt instance given a ShoppingCart instance as input.
-            Validates the ShoppingCart instance before initializing a Receipt instance. 
+            Validates the ShoppingCart instance before initializing the Receipt instance. 
         */
         public Receipt(ShoppingCart shoppingCart)
         {
@@ -40,7 +44,7 @@ namespace Price_Calculator_Classes
 
         /*
             Helper method generates and displays the header portion of the Receipt. Calls the Formatter extension's AlignCenter method
-            to align the header items in the center of the Console Window depending on its size.
+            to align the header items in the center of the Console Window depending on the Window's size.
         */
         private void GenerateHeader()
         {
@@ -60,18 +64,18 @@ namespace Price_Calculator_Classes
             Formatter.AlignLeftRight("Product", "Price");
             Formatter.AddLine();
 
-            foreach(var product in this.ShoppingCart)
+            foreach (var product in this.ShoppingCart)
             {
                 Formatter.AlignLeftRight(product.Name, "$" + product.Price.ToString());
             }
         }
 
-       /*
-            Helper method generates and displays the totals section of the Receipt.
-            Does this by retrieving the various total properties in the ShoppingCart class.
-            Ususes the Formatter extensions's AlignLeftRight method.
-       */
-       private void GenerateTotals()
+        /*
+             Helper method generates and displays the totals section of the Receipt.
+             Does this by retrieving the various total properties in the ShoppingCart class.
+             Ususes the Formatter extensions's AlignLeftRight method.
+        */
+        private void GenerateTotals()
         {
             Formatter.AlignLeftRight("Subtotal:", "$" + Math.Round(this.ShoppingCart.Subtotal, 2).ToString());
             Formatter.AlignLeftRight("Total Tax Amount:", "$" + Math.Round(this.ShoppingCart.TotalTax, 2).ToString());
@@ -83,7 +87,7 @@ namespace Price_Calculator_Classes
         //Helper method validates that a Receipt's ShoppingCart field (provided by user) is not null. Throws an ArgumentException if it is.
         private void Validate(ShoppingCart shoppingCart)
         {
-            if(shoppingCart == null)
+            if (shoppingCart == null)
             {
                 throw new NullReferenceException("Invalid input! Please make sure that the ShoppingCart you are passing is NOT null.");
             }
