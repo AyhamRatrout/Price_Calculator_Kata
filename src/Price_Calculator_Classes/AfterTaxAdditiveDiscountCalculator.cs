@@ -52,7 +52,7 @@ namespace Price_Calculator_Classes
         public double Calculate(Product product, double Price)
         {
             var discountCapAmount = DiscountCapCalculator.GetDiscountCap(product);
-            var totalBeforeTaxDiscounts = (this.RelativeDiscountCalculator.Calculate(product, Price) + this.SpecialDiscountCalculator.Calculate(product, Price));
+            var totalBeforeTaxDiscounts = Math.Round((this.RelativeDiscountCalculator.Calculate(product, Price) + this.SpecialDiscountCalculator.Calculate(product, Price)), 4);
 
             if (totalBeforeTaxDiscounts > discountCapAmount)
             {

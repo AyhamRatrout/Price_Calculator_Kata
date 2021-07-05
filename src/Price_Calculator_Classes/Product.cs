@@ -26,7 +26,7 @@ namespace Price_Calculator_Classes
         {
             this.Name = Name;
             this.UPC = UPC;
-            this.Price = Math.Round(Price, 2);
+            this.Price = Math.Round(Price, 4);
             this.ListOfCosts = new AdditionalCostsList();
             this.DiscountCap = new DiscountCap(double.MaxValue, AmountType.Absolute);
             Validate(); //validates the values above before creating a Product instance
@@ -41,7 +41,7 @@ namespace Price_Calculator_Classes
         {
             this.Name = Name;
             this.UPC = UPC;
-            this.Price = Math.Round(Price, 2);
+            this.Price = Math.Round(Price, 4);
             this.ListOfCosts = ListOfCosts;
             this.DiscountCap = new DiscountCap(double.MaxValue, AmountType.Absolute);
             Validate(); //validates the values above before creating a Product instance
@@ -56,7 +56,7 @@ namespace Price_Calculator_Classes
         {
             this.Name = Name;
             this.UPC = UPC;
-            this.Price = Math.Round(Price, 2);
+            this.Price = Math.Round(Price, 4);
             this.ListOfCosts = new AdditionalCostsList();
             this.DiscountCap = DiscountCap;
             Validate();
@@ -71,7 +71,7 @@ namespace Price_Calculator_Classes
         {
             this.Name = Name;
             this.UPC = UPC;
-            this.Price = Math.Round(Price, 2);
+            this.Price = Math.Round(Price, 4);
             this.ListOfCosts = ListOfCosts;
             this.DiscountCap = DiscountCap;
             Validate();

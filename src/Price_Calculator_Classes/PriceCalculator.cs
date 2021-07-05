@@ -57,11 +57,11 @@ namespace Price_Calculator_Classes
         public double CalculatePrice(Product product)
         {
             var Price = product.Price;
-            var BeforeTaxDiscounts = this.DiscountCalculator.BeforeTaxDiscountCalculator.Calculate(product);
-            var Tax = this.TaxCalculator.CalculateTaxAmount(Price - BeforeTaxDiscounts);
-            var TotalDiscount = this.DiscountCalculator.Calculate(product);
-            var AdditionalCosts = AdditionalCostsCalculator.CalculateAdditionalCosts(product);
-            return (Price - TotalDiscount + Tax + AdditionalCosts);
+            var BeforeTaxDiscounts = Math.Round(this.DiscountCalculator.BeforeTaxDiscountCalculator.Calculate(product), 4);
+            var Tax = Math.Round(this.TaxCalculator.CalculateTaxAmount(Price - BeforeTaxDiscounts), 4);
+            var TotalDiscount = Math.Round(this.DiscountCalculator.Calculate(product), 4);
+            var AdditionalCosts = Math.Round(AdditionalCostsCalculator.CalculateAdditionalCosts(product), 4);
+            return Math.Round((Price - TotalDiscount + Tax + AdditionalCosts), 4);
         }
 
         //Validates the RelativeDiscountList and the SpecialDiscountList provided to the class cosntructor. Throws an ArgumentException if either is null.

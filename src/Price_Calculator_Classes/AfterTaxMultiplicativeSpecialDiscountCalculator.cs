@@ -54,7 +54,7 @@ namespace Price_Calculator_Classes
             {
                 if (specialDiscount.UPC == product.UPC)
                 {
-                    specialDiscountAmount = (Price * ArithmeticExtensions.PercentageToDecimal(specialDiscount.Discount));
+                    specialDiscountAmount = Math.Round((Price * ArithmeticExtensions.PercentageToDecimal(specialDiscount.Discount)), 4);
                     Price -= specialDiscountAmount;
                     totalSpecialDiscountAmount += specialDiscountAmount;
 
@@ -64,7 +64,7 @@ namespace Price_Calculator_Classes
                     }
                 }
             }
-            return totalSpecialDiscountAmount;
+            return Math.Round(totalSpecialDiscountAmount, 4);
         }
 
         //Validates a given SpecialDiscountList instance. Throws an ArgumentException if it is null.

@@ -25,7 +25,7 @@ namespace Price_Calculator_Classes
         //Calculates and returns the tax amount applied to a Product to two decimal places. Takes a Price (double) as input.
         public double CalculateTaxAmount(double Price)
         {
-            return Math.Round((Price * ArithmeticExtensions.PercentageToDecimal(this.Tax)), 2);
+            return Math.Round((Price * ArithmeticExtensions.PercentageToDecimal(this.Tax)), 4);
         }
 
         //Helper method Validates a provided Tax percentage for acceptability. Throws an ArgumentException if invalid.

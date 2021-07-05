@@ -45,7 +45,7 @@ namespace Price_Calculator_Classes
         }
 
         //Stores the Currency ISO-3 Code in which the ShoppingCart's transactions (operations) are happening. Each ShoppingCart instance must have a Currency ISO-3 Code.
-        public string Currency_ISO3_Code {get; private set;}
+        public string Currency_ISO3_Code { get; private set; }
 
         /*
             Class constructor initializes a ShoppingCart instance when provided a PriceCalculator instance and a Currency ISO-3 Code (string) as inputs.
@@ -82,12 +82,12 @@ namespace Price_Calculator_Classes
         //Helper method increments the five Total fields when called. Gets called every time a Product is added to the ShoppingCart.
         private void IncrementTotals(Product product)
         {
-            this.Subtotal += product.Price;
-            var BeforeTaxDiscounts = this.PriceCalculator.DiscountCalculator.BeforeTaxDiscountCalculator.Calculate(product);
-            this.TotalTax += this.PriceCalculator.TaxCalculator.CalculateTaxAmount(product.Price - BeforeTaxDiscounts);
-            this.TotalDiscount += this.PriceCalculator.DiscountCalculator.Calculate(product);
-            this.TotalAdditionalCosts += AdditionalCostsCalculator.CalculateAdditionalCosts(product);
-            this.Total += this.PriceCalculator.CalculatePrice(product);
+            this.Subtotal += Math.Round(product.Price, 4);
+            var BeforeTaxDiscounts = Math.Round(this.PriceCalculator.DiscountCalculator.BeforeTaxDiscountCalculator.Calculate(product), 4);
+            this.TotalTax += Math.Round(this.PriceCalculator.TaxCalculator.CalculateTaxAmount(product.Price - BeforeTaxDiscounts), 4);
+            this.TotalDiscount += Math.Round(this.PriceCalculator.DiscountCalculator.Calculate(product), 4);
+            this.TotalAdditionalCosts += Math.Round(AdditionalCostsCalculator.CalculateAdditionalCosts(product), 4);
+            this.Total += Math.Round(this.PriceCalculator.CalculatePrice(product), 4);
         }
 
         /*
@@ -110,12 +110,12 @@ namespace Price_Calculator_Classes
         //Helper method decrements the five Total fields when called. Gets called every time a Product is removed from the ShoppingCart.        
         private void DecrementTotals(Product product)
         {
-            this.Subtotal -= product.Price;
-            var BeforeTaxDiscounts = this.PriceCalculator.DiscountCalculator.BeforeTaxDiscountCalculator.Calculate(product);
-            this.TotalTax -= this.PriceCalculator.TaxCalculator.CalculateTaxAmount(product.Price - BeforeTaxDiscounts);
-            this.TotalDiscount -= this.PriceCalculator.DiscountCalculator.Calculate(product);
-            this.TotalAdditionalCosts -= AdditionalCostsCalculator.CalculateAdditionalCosts(product);
-            this.Total -= this.PriceCalculator.CalculatePrice(product);
+            this.Subtotal -= Math.Round(product.Price, 4);
+            var BeforeTaxDiscounts = Math.Round(this.PriceCalculator.DiscountCalculator.BeforeTaxDiscountCalculator.Calculate(product), 4);
+            this.TotalTax -= Math.Round(this.PriceCalculator.TaxCalculator.CalculateTaxAmount(product.Price - BeforeTaxDiscounts), 4);
+            this.TotalDiscount -= Math.Round(this.PriceCalculator.DiscountCalculator.Calculate(product), 4);
+            this.TotalAdditionalCosts -= Math.Round(AdditionalCostsCalculator.CalculateAdditionalCosts(product), 4);
+            this.Total -= Math.Round(this.PriceCalculator.CalculatePrice(product), 4);
         }
 
         //Clears all the Product items from the ShoppingCart instance.        
@@ -165,7 +165,7 @@ namespace Price_Calculator_Classes
         */
         private void Validate(string Currency_ISO3_Code)
         {
-            if(Currency_ISO3_Code == null)
+            if (Currency_ISO3_Code == null)
             {
                 throw new ArgumentException("Invalid input! Please make sure that the Currency ISO-3 Code you are providing is not null.");
             }
@@ -177,10 +177,10 @@ namespace Price_Calculator_Classes
             var hasCurrencyISO = File.ReadAllLines(path).Where(ISOCode => ISOCode.Equals(Currency_ISO3_Code)).Any();
 
             //If no matches were found, throws an ArgumentException guiding the user to the link containing all internationally recognized Currency Codes.
-            if(!hasCurrencyISO)
+            if (!hasCurrencyISO)
             {
-                throw new ArgumentException("Invalid input! Please make sure that the Currency ISO-3 Code you are passing is an internationally recognized code. Visit https://datahub.io/core/currency-codes#resource-codes-all for a complete list of all the internationally recognized Currency ISO-3 Codes.");                
-            }                                    
+                throw new ArgumentException("Invalid input! Please make sure that the Currency ISO-3 Code you are passing is an internationally recognized code. Visit https://datahub.io/core/currency-codes#resource-codes-all for a complete list of all the internationally recognized Currency ISO-3 Codes.");
+            }
         }
     }
 }

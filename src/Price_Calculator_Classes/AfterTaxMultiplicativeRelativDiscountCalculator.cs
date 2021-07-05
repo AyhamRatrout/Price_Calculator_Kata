@@ -52,7 +52,7 @@ namespace Price_Calculator_Classes
 
             foreach (var relativeDiscount in this.RelativeDiscountList)
             {
-                relativeDiscountAmount = (Price * ArithmeticExtensions.PercentageToDecimal(relativeDiscount.Discount));
+                relativeDiscountAmount = Math.Round((Price * ArithmeticExtensions.PercentageToDecimal(relativeDiscount.Discount)), 4);
                 Price -= relativeDiscountAmount;
                 totalRelativeDiscountAmount += relativeDiscountAmount;
 
@@ -61,7 +61,7 @@ namespace Price_Calculator_Classes
                     return discocuntCapAmount;
                 }
             }
-            return totalRelativeDiscountAmount;
+            return Math.Round(totalRelativeDiscountAmount, 4);
         }
 
         //Validates a given RelativeDiscountList instance. Throws an ArgumentException if it is null.

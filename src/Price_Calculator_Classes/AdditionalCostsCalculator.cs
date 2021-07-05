@@ -1,3 +1,4 @@
+using System;
 using Extension_Library;
 
 namespace Price_Calculator_Classes
@@ -12,19 +13,20 @@ namespace Price_Calculator_Classes
         public static double CalculateAdditionalCosts(Product product)
         {
             var additionalCosts = 0.00;
+
             foreach (var additionalCost in product.ListOfCosts)
             {
                 if (additionalCost.AmountType == AmountType.Percentage)
                 {
                     //If the amount is a percentage of Price, this calculates the absolute amount then adds it to the sum of Additional Costs.
-                    additionalCosts += (product.Price * ArithmeticExtensions.PercentageToDecimal(additionalCost.Amount));
+                    additionalCosts += Math.Round((product.Price * ArithmeticExtensions.PercentageToDecimal(additionalCost.Amount)), 4);
                 }
                 else
                 {
-                    additionalCosts += additionalCost.Amount;
+                    additionalCosts += Math.Round(additionalCost.Amount, 4);
                 }
             }
-            return additionalCosts;
+            return Math.Round(additionalCosts, 4);
         }
     }
 }

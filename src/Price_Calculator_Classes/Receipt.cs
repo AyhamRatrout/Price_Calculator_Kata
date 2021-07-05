@@ -66,7 +66,7 @@ namespace Price_Calculator_Classes
 
             foreach (var product in this.ShoppingCart)
             {
-                Formatter.AlignLeftRight(product.Name, product.Price.ToString() + " "+ this.ShoppingCart.Currency_ISO3_Code);
+                Formatter.AlignLeftRight(product.Name, Math.Round(product.Price, 2).ToString() + " " + this.ShoppingCart.Currency_ISO3_Code);
             }
         }
 

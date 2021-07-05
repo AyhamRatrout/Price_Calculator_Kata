@@ -52,9 +52,9 @@ namespace Price_Calculator_Classes
         public double Calculate(Product product)
         {
             var discountCapAmount = DiscountCapCalculator.GetDiscountCap(product);
-            var relativeDiscounts = this.RelativeDiscountCalculator.Calculate(product, product.Price);
-            var remainingPrice = (product.Price - relativeDiscounts);
-            var specialDiscounts = this.SpecialDiscountCalculator.Calculate(product, remainingPrice);
+            var relativeDiscounts = Math.Round(this.RelativeDiscountCalculator.Calculate(product, product.Price), 4);
+            var remainingPrice = Math.Round((product.Price - relativeDiscounts), 4);
+            var specialDiscounts = Math.Round(this.SpecialDiscountCalculator.Calculate(product, remainingPrice), 4);
 
             if ((relativeDiscounts + specialDiscounts) > discountCapAmount)
             {

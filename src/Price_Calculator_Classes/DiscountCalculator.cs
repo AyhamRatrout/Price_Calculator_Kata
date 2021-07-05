@@ -50,7 +50,7 @@ namespace Price_Calculator_Classes
         public double Calculate(Product product)
         {
             var discountCapAmount = DiscountCapCalculator.GetDiscountCap(product);
-            var totalDiscounts = this.BeforeTaxDiscountCalculator.Calculate(product);
+            var totalDiscounts = Math.Round(this.BeforeTaxDiscountCalculator.Calculate(product), 4);
 
             if (totalDiscounts > discountCapAmount)
             {
@@ -59,7 +59,7 @@ namespace Price_Calculator_Classes
 
             else
             {
-                totalDiscounts += this.AfterTaxDiscountCalculator.Calculate(product, product.Price - totalDiscounts);
+                totalDiscounts += Math.Round(this.AfterTaxDiscountCalculator.Calculate(product, product.Price - totalDiscounts));
                 if (totalDiscounts > discountCapAmount)
                 {
                     return discountCapAmount;

@@ -53,7 +53,7 @@ namespace Price_Calculator_Classes
             {
                 if (specialDiscount.UPC == product.UPC)
                 {
-                    specialDiscountAmount += (Price * ArithmeticExtensions.PercentageToDecimal(specialDiscount.Discount));
+                    specialDiscountAmount += Math.Round((Price * ArithmeticExtensions.PercentageToDecimal(specialDiscount.Discount)), 4);
                     if (specialDiscountAmount > discountCapAmount)
                     {
                         return discountCapAmount;

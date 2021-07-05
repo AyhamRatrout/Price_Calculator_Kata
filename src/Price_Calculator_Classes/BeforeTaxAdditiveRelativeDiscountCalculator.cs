@@ -52,7 +52,7 @@ namespace Price_Calculator_Classes
 
             foreach (var relativeDiscount in this.RelativeDiscountList)
             {
-                relativeDiscountAmount += (Price * ArithmeticExtensions.PercentageToDecimal(relativeDiscount.Discount));
+                relativeDiscountAmount += Math.Round((Price * ArithmeticExtensions.PercentageToDecimal(relativeDiscount.Discount)), 4);
                 if (relativeDiscountAmount > discountCapAmount)
                 {
                     return discountCapAmount;

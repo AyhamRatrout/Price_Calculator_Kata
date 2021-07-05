@@ -1,3 +1,4 @@
+using System;
 using Extension_Library;
 
 namespace Price_Calculator_Classes
@@ -18,10 +19,10 @@ namespace Price_Calculator_Classes
         {
             if (product.DiscountCap.AmountType == AmountType.Percentage)
             {
-                return (product.Price * ArithmeticExtensions.PercentageToDecimal(product.DiscountCap.Amount));
+                return Math.Round((product.Price * ArithmeticExtensions.PercentageToDecimal(product.DiscountCap.Amount)), 4);
             }
 
-            return product.DiscountCap.Amount;
+            return Math.Round(product.DiscountCap.Amount, 4);
         }
     }
 }
