@@ -8,7 +8,7 @@ namespace Price_Calculator_Classes
         Price calculation made to each Product in a given ShoppingCart instance.
 
         This allows the user to view Discounts applied to a Product and and their amount, Tax and its amount, and each Additional cost and its amount
-        which have been applied to each Product in their ShoppingCart
+        which have been applied to each Product in their ShoppingCart as well as the Currency in which these transactions happen.
     */
     public class Report
     {
@@ -50,8 +50,8 @@ namespace Price_Calculator_Classes
                 //Stores the Price of a Product that remains after applying the Before-Tax Discounts.
                 var remainingPrice = (product.Price - this.ShoppingCart.PriceCalculator.DiscountCalculator.BeforeTaxDiscountCalculator.Calculate(product));
 
-                //Prints a Product's name, UPC, and Price to the console.
-                Console.WriteLine($"Product Name: {product.Name}, Product UPC: {product.UPC}, Product Price: ${product.Price:N2}");
+                //Prints a Product's name, UPC, and Price (followed by the ShoppingCart's Currency ISO-3 Code) to the console.
+                Console.WriteLine($"Product Name: {product.Name}, Product UPC: {product.UPC}, Product Price: {product.Price:N2} " + this.ShoppingCart.Currency_ISO3_Code);
 
                 GenerateTaxReport(taxCalculator, remainingPrice);
 
@@ -59,8 +59,8 @@ namespace Price_Calculator_Classes
                 
                 GenerateAdditionalCostsReport(product);
 
-                //Prints to the Console the final Price of the Product after all Discounts, Taxes, and Costs have been applied.
-                Console.WriteLine($"Price after adjustments were applied: ${this.ShoppingCart.PriceCalculator.CalculatePrice(product)}");
+                //Prints to the Console the final Price (followed by the Currency ISO-3 Code) of the Product after all Discounts, Taxes, and Costs have been applied.
+                Console.WriteLine($"Price after adjustments were applied: {this.ShoppingCart.PriceCalculator.CalculatePrice(product)} " + this.ShoppingCart.Currency_ISO3_Code);
 
                 Formatter.AddLine();
                 
@@ -81,7 +81,7 @@ namespace Price_Calculator_Classes
         //Helper method calculates and displays the Tax percentage and amount applied to each product. Prints the results to the console.
         private void GenerateTaxReport(TaxCalculator taxCalculator, double Price)
         {
-            Console.WriteLine($"Tax was reported at: {taxCalculator.Tax}% which adds ${taxCalculator.CalculateTaxAmount(Price):N2} to the product's price.");
+            Console.WriteLine($"Tax was reported at: {taxCalculator.Tax}% which adds {taxCalculator.CalculateTaxAmount(Price):N2} " + this.ShoppingCart.Currency_ISO3_Code + " to the product's price.");
         }
 
         //Helper method calculates and displays the Total Discount amount applied to each Product instance. Informs the user whether or not a Discount Cap was applied.
@@ -89,14 +89,16 @@ namespace Price_Calculator_Classes
         {
             var totalDiscountAmount = discountCalculator.Calculate(product);
 
+            //if the DiscountCap was reached, prints the following message.
             if(totalDiscountAmount == DiscountCapCalculator.GetDiscountCap(product))
             {
-                Console.WriteLine($"This product has a discount cap applied to it! Therefore, total discounts applied to this product were capped at: ${totalDiscountAmount}");
+                Console.WriteLine($"This product has a discount cap applied to it! Therefore, total discounts applied to this product were capped at: {totalDiscountAmount} " + this.ShoppingCart.Currency_ISO3_Code);
             }
             
+            //if the DiscountCap was not reached, prints the following message.
             else
             {
-                Console.WriteLine($"Total discounts applied to this product add up to: ${totalDiscountAmount}");
+                Console.WriteLine($"Total discounts applied to this product add up to: {totalDiscountAmount} " + this.ShoppingCart.Currency_ISO3_Code);
             }
         }
 
@@ -107,16 +109,16 @@ namespace Price_Calculator_Classes
             {
                 Console.WriteLine("Additional costs on this product include:");
 
-                //Enumerates over the AdditionalDiscountList for the given Product (if it's not empty) and Prints the Cost Description and its Amount.
+                //Enumerates over the AdditionalDiscountList for the given Product (if it's not empty) and Prints the Cost Description and its Amount along with the Currency code.
                 foreach (var additionalCost in product.ListOfCosts)
                 {
                     if (additionalCost.AmountType == AmountType.Absolute)
                     {
-                        Console.WriteLine($"\t{additionalCost.Description}: ${additionalCost.Amount}");
+                        Console.WriteLine($"\t{additionalCost.Description}: {additionalCost.Amount} " + this.ShoppingCart.Currency_ISO3_Code);
                     }
                     else
                     {
-                        Console.WriteLine($"\t{additionalCost.Description}: ${Math.Round(product.Price * ArithmeticExtensions.PercentageToDecimal(additionalCost.Amount), 2)}");
+                        Console.WriteLine($"\t{additionalCost.Description}: {Math.Round(product.Price * ArithmeticExtensions.PercentageToDecimal(additionalCost.Amount), 2)} " + this.ShoppingCart.Currency_ISO3_Code);
                     }
                 }
             }

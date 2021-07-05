@@ -6,14 +6,14 @@ namespace Price_Calculator_Classes
     {
         static void Main(string[] args)
         {
-            //TestPriceCalculatorWithAdditiveCombining();
-            //TestPriceCalculatorWithMultiplicativeCombining();
+            TestPriceCalculatorWithAdditiveCombining();
+            TestPriceCalculatorWithMultiplicativeCombining();
             TestPriceCalculatorWithAdditiveCombiningWithDiscountCap();
             TestPriceCalculatorWithMultiplicativeCombiningWithDiscountCap();
         }
 
         /*
-            Tests the Additive Combining feature for a ShoppingCart instance's PriceCalculator.            
+            Tests the Additive Combining feature for a ShoppingCart instance's PriceCalculator. Also tests the Currency ISO-3 feature for the ShoppingCart instance.           
         */
         public static void TestPriceCalculatorWithAdditiveCombining()
         {
@@ -56,8 +56,8 @@ namespace Price_Calculator_Classes
             Orbees.ListOfCosts.Add(new AdditionalCost("Shipping", 5, AmountType.Absolute));
             Orbees.ListOfCosts.Add(new AdditionalCost("Fun cost", 2, AmountType.Absolute));
 
-            //Create a ShoppingCart instance and populate it with the items (Products) initialized above.
-            var shoppingCart = new ShoppingCart(PriceCalculator);
+            //Create a ShoppingCart instance using a PriceCalculator instance and a Currency ISO-3, and populate it with the items (Products) initialized above.
+            var shoppingCart = new ShoppingCart(PriceCalculator, "USD");
             shoppingCart.Add(Apples);
             shoppingCart.Add(Bananas);
             shoppingCart.Add(Lofas);
@@ -71,7 +71,7 @@ namespace Price_Calculator_Classes
         }
 
         /*
-            Tests the Multiplicative Combining feature for a ShoppingCart instance's PriceCalculator.
+            Tests the Multiplicative Combining feature for a ShoppingCart instance's PriceCalculator. Also tests the Currency ISO-3 feature for the ShoppingCart instance.
         */
         public static void TestPriceCalculatorWithMultiplicativeCombining()
         {
@@ -114,8 +114,8 @@ namespace Price_Calculator_Classes
             Orbees.ListOfCosts.Add(new AdditionalCost("Shipping", 5, AmountType.Absolute));
             Orbees.ListOfCosts.Add(new AdditionalCost("Fun cost", 2, AmountType.Absolute));
 
-            //Create a ShoppingCart instance and populate it with the items (Products) initialized above.
-            var shoppingCart = new ShoppingCart(PriceCalculator);
+            //Create a ShoppingCart instance using a PriceCalculator instance and a Currency ISO-3, and populate it with the items (Products) initialized above.
+            var shoppingCart = new ShoppingCart(PriceCalculator, "EUR");
             shoppingCart.Add(Apples);
             shoppingCart.Add(Bananas);
             shoppingCart.Add(Lofas);
@@ -128,7 +128,7 @@ namespace Price_Calculator_Classes
             report.Print();
         }
 
-        //Tests the DiscountCap feature for a ShoppingCart instance with Additive Combining.
+        //Tests the DiscountCap feature for a ShoppingCart instance with Additive Combining. Also tests the Currency ISO-3 feature for the ShoppingCart instance.
         public static void TestPriceCalculatorWithAdditiveCombiningWithDiscountCap()
         {
             //create two discocunt lists: a RelativeDiscountList and a SpecialDiscountList
@@ -170,8 +170,8 @@ namespace Price_Calculator_Classes
             Orbees.ListOfCosts.Add(new AdditionalCost("Shipping", 5, AmountType.Absolute));
             Orbees.ListOfCosts.Add(new AdditionalCost("Fun cost", 2, AmountType.Absolute));
 
-            //Create a ShoppingCart instance and populate it with the items (Products) initialized above.
-            var shoppingCart = new ShoppingCart(PriceCalculator);
+            //Create a ShoppingCart instance using a PriceCalculator instance and a Currency ISO-3, and populate it with the items (Products) initialized above.
+            var shoppingCart = new ShoppingCart(PriceCalculator, "GBP");
             shoppingCart.Add(Apples);
             shoppingCart.Add(Bananas);
             shoppingCart.Add(Lofas);
@@ -184,7 +184,7 @@ namespace Price_Calculator_Classes
             report.Print();
         }
 
-        //Tests the DiscountCap feature for a ShoppingCart instance with Multiplicative Combining.
+        //Tests the DiscountCap feature for a ShoppingCart instance with Multiplicative Combining. Also tests the Currency ISO-3 feature for the ShoppingCart instance.
         public static void TestPriceCalculatorWithMultiplicativeCombiningWithDiscountCap()
         {
             //create two discocunt lists: a RelativeDiscountList and a SpecialDiscountList
@@ -226,8 +226,8 @@ namespace Price_Calculator_Classes
             Orbees.ListOfCosts.Add(new AdditionalCost("Shipping", 5, AmountType.Absolute));
             Orbees.ListOfCosts.Add(new AdditionalCost("Fun cost", 2, AmountType.Absolute));
 
-            //Create a ShoppingCart instance and populate it with the items (Products) initialized above.
-            var shoppingCart = new ShoppingCart(PriceCalculator);
+            //Create a ShoppingCart instance using a PriceCalculator instance and a Currency ISO-3, and populate it with the items (Products) initialized above.
+            var shoppingCart = new ShoppingCart(PriceCalculator, "USD");
             shoppingCart.Add(Apples);
             shoppingCart.Add(Bananas);
             shoppingCart.Add(Lofas);

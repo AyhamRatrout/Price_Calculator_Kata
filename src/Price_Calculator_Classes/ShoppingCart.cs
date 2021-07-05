@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.IO;
 
 namespace Price_Calculator_Classes
 {
@@ -42,17 +44,22 @@ namespace Price_Calculator_Classes
             get { return this.ListOfProducts.Count; }
         }
 
-        /*
-            Class constructor initializes a ShoppingCart instance when provided a PriceCalculator instance as input.
+        //Stores the Currency ISO-3 Code in which the ShoppingCart's transactions (operations) are happening. Each ShoppingCart instance must have a Currency ISO-3 Code.
+        public string Currency_ISO3_Code {get; private set;}
 
-            Does so by first Validating the provided PriceCalculator instance. If valid, creates an empty List of 
-            Product and stores the provided PriceCalculator instance.
+        /*
+            Class constructor initializes a ShoppingCart instance when provided a PriceCalculator instance and a Currency ISO-3 Code (string) as inputs.
+
+            Does so by first Validating both the provided PriceCalculator instance and the Currency ISO-3 Code value. If valid, creates an empty List of 
+            Product, stores the provided PriceCalculator instance, and stores the provided Currency ISO-3 Code.
         */
-        public ShoppingCart(PriceCalculator priceCalculator)
+        public ShoppingCart(PriceCalculator priceCalculator, string Currency_ISO3_Code)
         {
             Validate(priceCalculator);
+            Validate(Currency_ISO3_Code.ToUpper());
             this.ListOfProducts = new List<Product>();
             this.PriceCalculator = priceCalculator;
+            this.Currency_ISO3_Code = Currency_ISO3_Code.ToUpper();
         }
 
         /*
@@ -149,6 +156,31 @@ namespace Price_Calculator_Classes
             {
                 throw new ArgumentException("Operation failed! Please make sure that the PriceCalculator you are providing is not null.");
             }
+        }
+
+        /*
+            Validates the provided Currency ISO-3 Code string value. 
+            
+            Throws an ArgumentException if the string is null or if the Currency ISO-3 Code is not an internationally recognized code (not in the iso3_codes.csv file). 
+        */
+        private void Validate(string Currency_ISO3_Code)
+        {
+            if(Currency_ISO3_Code == null)
+            {
+                throw new ArgumentException("Invalid input! Please make sure that the Currency ISO-3 Code you are providing is not null.");
+            }
+
+            //where the file is stored on my local computer but feel free to change the path should you choose to form my project.
+            var path = @"C:\Users\aiham\Price_Calculator_Kata\iso3_codes.csv";
+
+            //Uses LINQ to enumerate over the query in the CSV file and look for any Currency ISO-3 Code matching the provided one.
+            var hasCurrencyISO = File.ReadAllLines(path).Where(ISOCode => ISOCode.Equals(Currency_ISO3_Code)).Any();
+
+            //If no matches were found, throws an ArgumentException guiding the user to the link containing all internationally recognized Currency Codes.
+            if(!hasCurrencyISO)
+            {
+                throw new ArgumentException("Invalid input! Please make sure that the Currency ISO-3 Code you are passing is an internationally recognized code. Visit https://datahub.io/core/currency-codes#resource-codes-all for a complete list of all the internationally recognized Currency ISO-3 Codes.");                
+            }                                    
         }
     }
 }

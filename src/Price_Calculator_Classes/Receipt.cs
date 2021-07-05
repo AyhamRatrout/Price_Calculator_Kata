@@ -55,7 +55,7 @@ namespace Price_Calculator_Classes
 
         /*
             Helper method generates and displays the Product and Price columns of the Receipt.
-            Does this by enumerating over each item in the ShoppingCart and printing each product's Name and Price.
+            Does this by enumerating over each item in the ShoppingCart and printing each product's Name and Price followed by the ShoppingCart's Currency ISO-3 Code.
             Uses a the Formatter extension's AlignLeftRight method which aligns the product's name to the left of the Console Window and the 
             product's price to the right of the Console Window.
         */
@@ -66,7 +66,7 @@ namespace Price_Calculator_Classes
 
             foreach (var product in this.ShoppingCart)
             {
-                Formatter.AlignLeftRight(product.Name, "$" + product.Price.ToString());
+                Formatter.AlignLeftRight(product.Name, product.Price.ToString() + " "+ this.ShoppingCart.Currency_ISO3_Code);
             }
         }
 
@@ -77,11 +77,11 @@ namespace Price_Calculator_Classes
         */
         private void GenerateTotals()
         {
-            Formatter.AlignLeftRight("Subtotal:", "$" + Math.Round(this.ShoppingCart.Subtotal, 2).ToString());
-            Formatter.AlignLeftRight("Total Tax Amount:", "$" + Math.Round(this.ShoppingCart.TotalTax, 2).ToString());
-            Formatter.AlignLeftRight("Total Discount Amount:", "$" + Math.Round(this.ShoppingCart.TotalDiscount, 2).ToString());
-            Formatter.AlignLeftRight("Total Additional Costs:", "$" + Math.Round(this.ShoppingCart.TotalAdditionalCosts, 2));
-            Formatter.AlignLeftRight("Total:", "$" + Math.Round(this.ShoppingCart.Total, 2).ToString());
+            Formatter.AlignLeftRight("Subtotal:", Math.Round(this.ShoppingCart.Subtotal, 2).ToString() + " " + this.ShoppingCart.Currency_ISO3_Code);
+            Formatter.AlignLeftRight("Total Tax Amount:", Math.Round(this.ShoppingCart.TotalTax, 2).ToString() + " " + this.ShoppingCart.Currency_ISO3_Code);
+            Formatter.AlignLeftRight("Total Discount Amount:", Math.Round(this.ShoppingCart.TotalDiscount, 2).ToString() + " " + this.ShoppingCart.Currency_ISO3_Code);
+            Formatter.AlignLeftRight("Total Additional Costs:", Math.Round(this.ShoppingCart.TotalAdditionalCosts, 2).ToString() + " " + this.ShoppingCart.Currency_ISO3_Code);
+            Formatter.AlignLeftRight("Total:", Math.Round(this.ShoppingCart.Total, 2).ToString() + " " + this.ShoppingCart.Currency_ISO3_Code);
         }
 
         //Helper method validates that a Receipt's ShoppingCart field (provided by user) is not null. Throws an ArgumentException if it is.
