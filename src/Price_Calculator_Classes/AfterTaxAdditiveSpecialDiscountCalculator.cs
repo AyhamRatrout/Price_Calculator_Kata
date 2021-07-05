@@ -41,15 +41,24 @@ namespace Price_Calculator_Classes
 
         /*
             Calculates and returns the SpecialDiscount amounts to be applied to a Product after Tax Additively.
+
+            If the SpecialDiscount amounts are greater than the Discount Cap amount applied to this Product, returns the Discount 
+            Cap amount. Otherwise, the SpecialDiscount amount is returned.
         */
         public double Calculate(Product product, double Price)
         {
             var specialDiscountAmount = 0.00;
+            var discountCapAmount = DiscountCapCalculator.GetDiscountCap(product);
+
             foreach (var specialDiscount in this.SpecialDiscountList)
             {
                 if (specialDiscount.UPC == product.UPC)
                 {
                     specialDiscountAmount += (Price * ArithmeticExtensions.PercentageToDecimal(specialDiscount.Discount));
+                    if (specialDiscountAmount > discountCapAmount)
+                    {
+                        return discountCapAmount;
+                    }
                 }
             }
             return specialDiscountAmount;

@@ -33,7 +33,7 @@ namespace Price_Calculator_Classes
             Does so by creating a BeforeTaxAdditiveRrelativeDiscountCalculator instance (with the provided RelativeDiscountList) and an
             AfterTaxAdditiveSpecialDiscountCalculator instance (with the provided SpecialDiscountList).
 
-            Validates both Lists (RelativeDiscountList and SpecialDiscocuntList) instances before creating a BeforeTaxAdditiveDiscountCalculator instance.
+            Validates both List (RelativeDiscountList and SpecialDiscocuntList) instances before creating a BeforeTaxAdditiveDiscountCalculator instance.
         */
         public BeforeTaxAdditiveDiscountCalculator(RelativeDiscountList relativeDiscountList, SpecialDiscountList specialDiscountList)
         {
@@ -45,10 +45,20 @@ namespace Price_Calculator_Classes
         /*
             Calculates and returns the total amount to be Discounted from a Product's Price, Additively, before 
             applying any Taxes or other Discounts to the Product.
+
+            If the total Discount amount is greater than the Discount Cap amount applied to this product, returns the Discount Cap amount. 
+            Otherwise, the total Discount amount is returned.
         */
         public double Calculate(Product product)
         {
-            return (this.RelativeDiscountCalculator.Calculate(product, product.Price) + this.SpecialDiscountCalculator.Calculate(product, product.Price));
+            var discountCapAmount = DiscountCapCalculator.GetDiscountCap(product);
+            var totalBeforeTaxDiscounts = (this.RelativeDiscountCalculator.Calculate(product, product.Price) + this.SpecialDiscountCalculator.Calculate(product, product.Price));
+
+            if (totalBeforeTaxDiscounts > discountCapAmount)
+            {
+                return discountCapAmount;
+            }
+            return totalBeforeTaxDiscounts;
         }
 
         //Validates the RelativeDiscountList and the SpecialDiscountList provided to the class cosntructor. Throws an ArgumentException if either is null.        

@@ -40,14 +40,23 @@ namespace Price_Calculator_Classes
         }
 
         /*
-            Calculates and returns the RelativeDiscount amount to be applied to a Product before Tax and Additively.
+            Calculates and returns the RelativeDiscount amount to be applied to a Product before Tax, Additively.
+
+            If the RelativeDiscount amount is greater than the Discount Cap amount applied to this Product, returns the Discount 
+            Cap amount. Otherwise, the RelativeDiscount amount is returned.
         */
         public double Calculate(Product product, double Price)
         {
             var relativeDiscountAmount = 0.00;
+            var discountCapAmount = DiscountCapCalculator.GetDiscountCap(product);
+
             foreach (var relativeDiscount in this.RelativeDiscountList)
             {
                 relativeDiscountAmount += (Price * ArithmeticExtensions.PercentageToDecimal(relativeDiscount.Discount));
+                if (relativeDiscountAmount > discountCapAmount)
+                {
+                    return discountCapAmount;
+                }
             }
             return relativeDiscountAmount;
         }

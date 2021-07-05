@@ -45,10 +45,20 @@ namespace Price_Calculator_Classes
 
         /*
             Calculates and returns the total Discount amount to be applied to a Product after Tax, Additively.
+
+            If the total Discount amount is greater than the Discount Cap amount applied to this product, it returns the Discount Cap amount.
+            Otherwise, the total Discount amount is returned.
         */
         public double Calculate(Product product, double Price)
         {
-            return (this.RelativeDiscountCalculator.Calculate(product, Price) + this.SpecialDiscountCalculator.Calculate(product, Price));
+            var discountCapAmount = DiscountCapCalculator.GetDiscountCap(product);
+            var totalBeforeTaxDiscounts = (this.RelativeDiscountCalculator.Calculate(product, Price) + this.SpecialDiscountCalculator.Calculate(product, Price));
+
+            if (totalBeforeTaxDiscounts > discountCapAmount)
+            {
+                return discountCapAmount;
+            }
+            return totalBeforeTaxDiscounts;
         }
 
         //Validates the RelativeDiscountList and the SpecialDiscountList provided to the class cosntructor. Throws an ArgumentException if either is null.

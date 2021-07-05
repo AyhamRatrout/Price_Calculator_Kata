@@ -76,9 +76,9 @@ namespace Price_Calculator_Classes
         private void IncrementTotals(Product product)
         {
             this.Subtotal += product.Price;
-            var BeforeTaxDiscounts = this.PriceCalculator.BeforeTaxDiscountCalculator.Calculate(product);
+            var BeforeTaxDiscounts = this.PriceCalculator.DiscountCalculator.BeforeTaxDiscountCalculator.Calculate(product);
             this.TotalTax += this.PriceCalculator.TaxCalculator.CalculateTaxAmount(product.Price - BeforeTaxDiscounts);
-            this.TotalDiscount += (BeforeTaxDiscounts + this.PriceCalculator.AfterTaxDiscountCalculator.Calculate(product, product.Price - BeforeTaxDiscounts));
+            this.TotalDiscount += this.PriceCalculator.DiscountCalculator.Calculate(product);
             this.TotalAdditionalCosts += AdditionalCostsCalculator.CalculateAdditionalCosts(product);
             this.Total += this.PriceCalculator.CalculatePrice(product);
         }
@@ -104,9 +104,9 @@ namespace Price_Calculator_Classes
         private void DecrementTotals(Product product)
         {
             this.Subtotal -= product.Price;
-            var BeforeTaxDiscounts = this.PriceCalculator.BeforeTaxDiscountCalculator.Calculate(product);
+            var BeforeTaxDiscounts = this.PriceCalculator.DiscountCalculator.BeforeTaxDiscountCalculator.Calculate(product);
             this.TotalTax -= this.PriceCalculator.TaxCalculator.CalculateTaxAmount(product.Price - BeforeTaxDiscounts);
-            this.TotalDiscount -= BeforeTaxDiscounts + this.PriceCalculator.AfterTaxDiscountCalculator.Calculate(product, product.Price - BeforeTaxDiscounts);
+            this.TotalDiscount -= this.PriceCalculator.DiscountCalculator.Calculate(product);
             this.TotalAdditionalCosts -= AdditionalCostsCalculator.CalculateAdditionalCosts(product);
             this.Total -= this.PriceCalculator.CalculatePrice(product);
         }

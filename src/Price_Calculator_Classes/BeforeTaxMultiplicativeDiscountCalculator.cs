@@ -44,13 +44,22 @@ namespace Price_Calculator_Classes
 
         /*
             Calculates and returns the total amount to be Discounted from a Product's Price before 
-            applying any Taxes or other Discounts to the Product Multiplicatively.
+            applying any Taxes or other Discounts to the Product, Multiplicatively.
+
+            If the total Discount amount is greater than the Discount Cap amount applied to this product, returns the Discount Cap amount. 
+            Otherwise, the total Discount amount is returned.
         */
         public double Calculate(Product product)
         {
+            var discountCapAmount = DiscountCapCalculator.GetDiscountCap(product);
             var relativeDiscounts = this.RelativeDiscountCalculator.Calculate(product, product.Price);
             var remainingPrice = (product.Price - relativeDiscounts);
             var specialDiscounts = this.SpecialDiscountCalculator.Calculate(product, remainingPrice);
+
+            if ((relativeDiscounts + specialDiscounts) > discountCapAmount)
+            {
+                return discountCapAmount;
+            }
             return (relativeDiscounts + specialDiscounts);
         }
 
